@@ -1,0 +1,124 @@
+{
+  "configVersion": 1,
+  "timestamp": 1682244553285,
+  "index": "/ba-armory/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/ba-armory/favicon.ico",
+        "/ba-armory/index.html",
+        "/ba-armory/main.98a17bb416991d4a.js",
+        "/ba-armory/manifest.webmanifest",
+        "/ba-armory/polyfills.f0f271ab337134cb.js",
+        "/ba-armory/runtime.845d4e9c25cc8fc8.js",
+        "/ba-armory/styles.9ae4818200228df4.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/ba-armory/assets/i18n/cn.json",
+        "/ba-armory/assets/i18n/en.json",
+        "/ba-armory/assets/i18n/jp.json",
+        "/ba-armory/assets/i18n/tw.json",
+        "/ba-armory/assets/icons/apple-touch-icon.png",
+        "/ba-armory/assets/icons/icon-128x128.png",
+        "/ba-armory/assets/icons/icon-144x144.png",
+        "/ba-armory/assets/icons/icon-152x152.png",
+        "/ba-armory/assets/icons/icon-16x16.png",
+        "/ba-armory/assets/icons/icon-192x192.png",
+        "/ba-armory/assets/icons/icon-32x32.png",
+        "/ba-armory/assets/icons/icon-384x384.png",
+        "/ba-armory/assets/icons/icon-48x48.png",
+        "/ba-armory/assets/icons/icon-512x512.png",
+        "/ba-armory/assets/icons/icon-72x72.png",
+        "/ba-armory/assets/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "remote-images",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [],
+      "patterns": [
+        "https:\\/\\/cdn\\.jsdelivr\\.net\\/gh\\/lonqie\\/SchaleDB\\/images\\/.*"
+      ]
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "remote-data",
+      "patterns": [
+        "https:\\/\\/cdn\\.jsdelivr\\.net\\/gh\\/lonqie\\/SchaleDB\\/data\\/.*"
+      ],
+      "strategy": "performance",
+      "maxSize": 10,
+      "maxAge": 604800000,
+      "timeoutMs": 5000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
+  "hashTable": {
+    "/ba-armory/assets/i18n/cn.json": "3a0ac936fb0a7a9953948aca103525f6551c7aa3",
+    "/ba-armory/assets/i18n/en.json": "89cbf2a6114fdb483c1cf619fedca7c686bc0eb9",
+    "/ba-armory/assets/i18n/jp.json": "2d7a01923a9647cea956f0eac620bc48aaa4e88e",
+    "/ba-armory/assets/i18n/tw.json": "3a300a377af55c8fdf68d428cbc1cc1a4c91689c",
+    "/ba-armory/assets/icons/apple-touch-icon.png": "8b3f8b6aef67077045a33320adc3e673791cadc5",
+    "/ba-armory/assets/icons/icon-128x128.png": "d5ec7d53548efa2156ac1fddf7eb6a7211ad881b",
+    "/ba-armory/assets/icons/icon-144x144.png": "bbb2e301523b4010239b2e1020126b57b68d0032",
+    "/ba-armory/assets/icons/icon-152x152.png": "74fea65f37504a17a021c2cc7447ba0e313487bc",
+    "/ba-armory/assets/icons/icon-16x16.png": "78eb1c1694d9f425bbdb7c24b5c9863ae0f6e04e",
+    "/ba-armory/assets/icons/icon-192x192.png": "37c0dd2dfd4f0a10b1651715e86dd2838ca0093b",
+    "/ba-armory/assets/icons/icon-32x32.png": "3472075bffeac78f8f86a0ce9e95088673c59c9c",
+    "/ba-armory/assets/icons/icon-384x384.png": "feccb951911bb936dc7b1c313d3b9ae578ac9013",
+    "/ba-armory/assets/icons/icon-48x48.png": "ef3bb58802a8edf9bd657436aa6124a25b1eb1e6",
+    "/ba-armory/assets/icons/icon-512x512.png": "3ce4e86e9bb14b1e83ba193a7fd8f3f68ecf981a",
+    "/ba-armory/assets/icons/icon-72x72.png": "80180bc90b52c58bae0f9f22c665e3c9c49a05c2",
+    "/ba-armory/assets/icons/icon-96x96.png": "196fe49ddc2a5dad1c684c9e0a3b61712e50ecdf",
+    "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
+    "/ba-armory/index.html": "fd709c22412b20ea21d3c0e167aba481f4871e1e",
+    "/ba-armory/main.98a17bb416991d4a.js": "03a6e50aad15e03ce68089080716196bfe6375f1",
+    "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
+    "/ba-armory/polyfills.f0f271ab337134cb.js": "a2a76368894fc74a092fe880214a1eab643b3623",
+    "/ba-armory/runtime.845d4e9c25cc8fc8.js": "59096c477675073435ddf0c3d19a44d432cad502",
+    "/ba-armory/styles.9ae4818200228df4.css": "fde4ff623b3599b2d2aa8c35faa57051b5774552"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
