@@ -1,4 +1,8 @@
 <h2 mat-dialog-title>{{ title }}</h2>
+<mat-form-field>
+	<mat-label>{{ studentName }}</mat-label>
+	<input matInput type="text" [ngModel]="filterText" (ngModelChange)="handleUpdateFilterText($event)"/>
+</mat-form-field>
 <div class="students" mat-dialog-content>
 	<ba-student-icon *ngFor="let id of missingStudents" [id]="id" (click)="handleClickStudent(id)"></ba-student-icon>
 </div>

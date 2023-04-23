@@ -35,7 +35,7 @@ export class PreloadService {
 		const studentsSource = `${CDN_BASE}/data/${language}/students.min.json`;
 		const stagesSource = `${CDN_BASE}/data/stages.min.json`;
 		const localizationSource = `${CDN_BASE}/data/${language}/localization.min.json`;
-		const i18nSource = `${this.baseHref}/assets/i18n/${language}.json`;
+		const i18nSource = `./assets/i18n/${language}.json`;
 
 		const [common, items, equipments, students, stages, localization, i18n] = await Promise.all([
 			this.fetchJson(commonSource),
@@ -129,16 +129,13 @@ export class PreloadService {
 	}
 
 	async loadDeck() {
-		try {
-			const compressed = localStorage.getItem(STORAGE_DECK_KEY) ?? '';
-			if (compressed === '') throw new Error();
-
-			const json = decompressFromUTF16(compressed) ?? '{}';
-			const plain = JSON.parse(json);
-			return this.dataService.setDeck(plain);
-		} catch (e: unknown) {}
-
-		return this.dataService.setDeck({});
+		const compressed = localStorage.getItem(STORAGE_DECK_KEY) ?? '';
+		if (compressed === '') {
+			return this.dataService.setDeck({});
+		}
+		const json = decompressFromUTF16(compressed) ?? '{}';
+		const plain = JSON.parse(json);
+		return this.dataService.setDeck(plain);
 	}
 
 	async exportData() {

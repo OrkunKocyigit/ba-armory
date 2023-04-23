@@ -11,7 +11,7 @@
 		"lint": "ng lint",
 		"analyze": "ng build --stats-json && webpack-bundle-analyzer dist/ba-armory/stats.json",
 		"serve": "http-server -p 4200 -c-1 dist/ba-armory",
-		"deploy": "ng deploy --base-href=https://orkunkocyigit.github.io/ba-armory/"
+		"deploy": "ng deploy --base-href=/ba-armory/"
 	},
 	"private": true,
 	"repository": {
