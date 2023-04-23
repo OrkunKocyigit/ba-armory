@@ -57,6 +57,11 @@ export class SelectorComponent implements OnInit, OnDestroy {
 		this.updateMissingStudents();
 	}
 
+	handleFilterInputClicked($event: FocusEvent) {
+		const target = $event.target as HTMLInputElement;
+		target.select();
+	}
+
 	updateMissingStudents() {
 		this.missingStudents = [];
 
