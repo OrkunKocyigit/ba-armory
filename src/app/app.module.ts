@@ -20,6 +20,7 @@ import { SelectorModule } from './pages/selector/selector.module';
 import { SettingModule } from './pages/setting/setting.module';
 import { HoverinputModule } from './services/hoverinput';
 import { PreloadService } from './services/preload.service';
+import { APP_BASE_HREF } from "@angular/common";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -50,6 +51,10 @@ import { PreloadService } from './services/preload.service';
 		}),
 	],
 	providers: [
+		{
+			provide: APP_BASE_HREF,
+			useValue: "/ba-armory/"
+		},
 		PreloadService,
 		{
 			provide: APP_INITIALIZER,

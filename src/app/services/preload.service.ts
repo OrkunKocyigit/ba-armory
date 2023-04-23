@@ -1,10 +1,11 @@
 import { instanceToPlain } from 'class-transformer';
 import { compressToBase64, compressToUTF16, decompressFromBase64, decompressFromUTF16 } from 'lz-string';
 
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from "@angular/core";
 
 import { CDN_BASE } from '../entities/constant';
 import { DataService } from './data.service';
+import { APP_BASE_HREF } from "@angular/common";
 
 const STORAGE_LANGUAGE_KEY = 'language';
 const STORAGE_REGION_KEY = 'region';
@@ -14,7 +15,7 @@ const STORAGE_DECK_KEY = 'deck';
 	providedIn: 'root',
 })
 export class PreloadService {
-	constructor(private dataService: DataService) {}
+	constructor(private dataService: DataService, @Inject(APP_BASE_HREF) private baseHref: string) {}
 
 	static initialize(preloadService: PreloadService) {
 		return () => preloadService.load();
@@ -34,7 +35,7 @@ export class PreloadService {
 		const studentsSource = `${CDN_BASE}/data/${language}/students.min.json`;
 		const stagesSource = `${CDN_BASE}/data/stages.min.json`;
 		const localizationSource = `${CDN_BASE}/data/${language}/localization.min.json`;
-		const i18nSource = `/assets/i18n/${language}.json`;
+		const i18nSource = `${this.baseHref}/assets/i18n/${language}.json`;
 
 		const [common, items, equipments, students, stages, localization, i18n] = await Promise.all([
 			this.fetchJson(commonSource),
