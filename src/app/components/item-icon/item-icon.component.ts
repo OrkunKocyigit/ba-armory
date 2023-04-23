@@ -79,6 +79,10 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	handleBlurStock() {
+		this.dataService.deck.selectedSquad.updateRequiredItems(this.dataService);
+	}
+
 	handleClickIcon() {
 		const dialogRef = this.dialog.open(ItemUserComponent, {
 			data: { id: this.id },

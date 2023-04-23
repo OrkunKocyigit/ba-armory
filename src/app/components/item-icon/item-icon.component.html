@@ -1,6 +1,6 @@
 <div class="base mat-elevation-z1">
 	<div class="figure mat-elevation-z2" mat-ripple [title]="name" [attr.tier]="tier" (click)="handleClickIcon()">
-		<img class="icon" loading="lazy" [src]="iconUrl" />
+		<img class="icon" loading="lazy" alt="I" [src]="iconUrl" />
 		<div *ngIf="tier != null" class="tier">T{{ tier }}</div>
 		<div *ngIf="rate != null" class="rate">{{ rate | percent }}</div>
 	</div>
@@ -31,6 +31,7 @@
 					[min]="0"
 					[step]="1"
 					(focus)="handleFocusStock($event)"
+					(blur)="handleBlurStock()"
 				/>
 			</div>
 		</div>
