@@ -1,10 +1,10 @@
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 
-import { ACTION_POINT_ID, CURRENCY_OFFSET } from '../../entities/deck';
-import { CampaignDifficulty, Reward } from '../../entities/enum';
-import { DataService } from '../../services/data.service';
+import { ACTION_POINT_ID, CURRENCY_OFFSET } from "../../entities/deck";
+import { CampaignDifficulty, Reward } from "../../entities/enum";
+import { DataService } from "../../services/data.service";
 
 @Component({
 	selector: 'ba-campaign-card',
@@ -48,7 +48,7 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 		this.stage = campaign.stage;
 		this.name = campaign.name;
 		this.iconUrl = campaign.iconUrl;
-		this.rewards = campaign.rewards?.default.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
+		this.rewards = campaign.regionalRewards(this.dataService)?.default.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
 		this.cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {

@@ -60,7 +60,6 @@ export class DeckSquad {
 			if (Array.isArray(changes.students)) {
 				for (const studentChange of changes.students) {
 					if (studentChange.previousValue) {
-						const deckStudent = dataService.deck.students.get(studentChange.previousValue);
 						unsubscribeDeckStudent(dataService.deck.students.get(studentChange.previousValue));
 						this.requiredStaled$.next();
 					}
@@ -140,7 +139,8 @@ export class DeckSquad {
 				let weight = 0;
 				const cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 				if (cost > 0) {
-					for (let [rewardId, rate] of campaign.rewards.default) {
+
+					for (let [rewardId, rate] of campaign.regionalRewards(dataService).default) {
 						const required = this.required[rewardId];
 						if (required > 0) {
 							let scale = 1;
@@ -167,7 +167,7 @@ export class DeckSquad {
 			.slice(0, 20)
 			.map(({ campaign }) => {
 				let amount = 0;
-				for (let [rewardId, rate] of campaign.rewards.default) {
+				for (let [rewardId, rate] of campaign.regionalRewards(dataService).default) {
 					const required = this.required[rewardId];
 					if (required > 0) amount = Math.max(amount, Math.max(0, required - dataService.deck.stocks[rewardId]) / rate);
 				}
