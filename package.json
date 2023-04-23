@@ -10,12 +10,13 @@
 		"test": "ng test",
 		"lint": "ng lint",
 		"analyze": "ng build --stats-json && webpack-bundle-analyzer dist/ba-armory/stats.json",
-		"serve": "http-server -p 4200 -c-1 dist/ba-armory"
+		"serve": "http-server -p 4200 -c-1 dist/ba-armory",
+		"deploy": "ng deploy --base-href=https://orkunkocyigit.github.io/ba-armory/"
 	},
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/arumi-s/ba-armory.git"
+		"url": "git+https://github.com/OrkunKocyigit/ba-armory.git"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -54,6 +55,7 @@
 		"@types/validator": "^13.7.5",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
+		"angular-cli-ghpages": "^1.0.5",
 		"eslint": "^8.18.0",
 		"http-server": "^14.1.1",
 		"jasmine-core": "~4.2.0",
