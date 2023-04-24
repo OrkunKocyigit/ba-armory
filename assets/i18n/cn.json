@@ -28,6 +28,7 @@
 	"item_show_surplus_items": "显示溢出",
 	"item_show_elephs": "显示神名文字",
 	"campaign_show_campaign_hard": "显示Hard任务",
+	"campaign_show_only_campaign_hard": "Show Only Hard Campaign",
 	"setting_save": "应用设定",
 	"setting_save_notice": "*应用设定将会重新加载页面",
 	"import_error": "数据格式错误",
