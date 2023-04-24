@@ -1,14 +1,15 @@
-import { Exclude, Expose, Type } from 'class-transformer';
-import { debounceTime, filter, Subject, Subscription } from 'rxjs';
+import { Exclude, Expose, Type } from "class-transformer";
+import { debounceTime, filter, Subject, Subscription } from "rxjs";
 
-import { Change, Changes } from './change';
-import { ACTION_POINT_ID } from './deck';
-import { DeckStocks, DeckStocksClear, wrapStocks } from './deck-stocks';
-import { DeckStudent } from './deck-student';
-import { CampaignDifficulty, StuffCategory } from './enum';
-import { ElephSortOption, ItemSortOption, StudentSortOption } from './types';
+import { Change, Changes } from "./change";
+import { ACTION_POINT_ID } from "./deck";
+import { DeckStocks, DeckStocksClear, wrapStocks } from "./deck-stocks";
+import { DeckStudent } from "./deck-student";
+import { CampaignDifficulty, StuffCategory } from "./enum";
+import { ElephSortOption, ItemSortOption, StudentSortOption } from "./types";
 
-import type { DataService } from '../services/data.service';
+import type { DataService } from "../services/data.service";
+
 @Exclude()
 export class DeckSquad {
 	id: number = 0;
@@ -74,7 +75,7 @@ export class DeckSquad {
 		});
 
 		dataService.deck.options.change$.subscribe((changes) => {
-			if (changes.showCampaignHard) {
+			if (changes.showCampaignHard || changes.showOnlyCampaignHard) {
 				this.requiredStaled$.next();
 			}
 		});
@@ -134,6 +135,7 @@ export class DeckSquad {
 	updateStages(dataService: DataService) {
 		const candidates = dataService.stages.campaign
 			.filter((campaign) => dataService.deck.options.showCampaignHard || campaign.difficulty !== CampaignDifficulty.Hard)
+			.filter((campaign) => !dataService.deck.options.showOnlyCampaignHard || campaign.difficulty === CampaignDifficulty.Hard)
 			.filter((campaign) => campaign.entryCost.every(([itemId]) => itemId === ACTION_POINT_ID))
 			.map((campaign) => {
 				let weight = 0;

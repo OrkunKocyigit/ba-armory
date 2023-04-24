@@ -28,6 +28,7 @@ export interface I18N {
 	item_show_surplus_items: string;
 	item_show_elephs: string;
 	campaign_show_campaign_hard: string;
+	campaign_show_only_campaign_hard: string;
 	setting_save: string;
 	setting_save_notice: string;
 	import_error: string;

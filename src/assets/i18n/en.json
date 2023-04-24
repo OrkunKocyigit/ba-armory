@@ -28,6 +28,7 @@
 	"item_show_surplus_items": "Show Surplus",
 	"item_show_elephs": "Show Eleph",
 	"campaign_show_campaign_hard": "Show Hard Campaign",
+	"campaign_show_only_campaign_hard": "Show Only Hard Campaign",
 	"setting_save": "Apply setting",
 	"setting_save_notice": "*Apply setting will reload the page",
 	"import_error": "Invalid Data Format",

@@ -50,6 +50,25 @@ export class DeckOptions {
 			const showCampaignHardOld = this.__showCampaignHard__;
 			this.__showCampaignHard__ = showCampaignHard;
 			this.change$.next({ showCampaignHard: new Change(showCampaignHardOld as false, this.__showCampaignHard__ as false) });
+			if (showCampaignHard === false) {
+				this.showOnlyCampaignHard = false
+			}
+		}
+	}
+
+	@Expose({ name: 'showOnlyCampaignHard' })
+	private __showOnlyCampaignHard__: boolean = false;
+
+	get showOnlyCampaignHard() {
+		return this.__showOnlyCampaignHard__;
+	}
+
+	set showOnlyCampaignHard(showOnlyCampaignHard: boolean) {
+		showOnlyCampaignHard = !!showOnlyCampaignHard;
+		if (this.__showOnlyCampaignHard__ !== showOnlyCampaignHard) {
+			const showCampaignHardOld = this.__showOnlyCampaignHard__;
+			this.__showOnlyCampaignHard__ = showOnlyCampaignHard;
+			this.change$.next({ showOnlyCampaignHard: new Change(showCampaignHardOld as false, this.__showOnlyCampaignHard__ as false) });
 		}
 	}
 

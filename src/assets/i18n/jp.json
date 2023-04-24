@@ -28,6 +28,7 @@
 	"item_show_surplus_items": "オーバーを表示",
 	"item_show_elephs": "神名文字を表示",
 	"campaign_show_campaign_hard": "Hard任務を表示",
+	"campaign_show_only_campaign_hard": "Show Only Hard Campaign",
 	"setting_save": "設定を適用",
 	"setting_save_notice": "*設定を適用すると、ページがリロードされます",
 	"import_error": "データが間違っている",
