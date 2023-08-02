@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { DataService } from '../../services/data.service';
 import { ItemUserComponent } from '../item-user/item-user.component';
+import { RewardService } from "../../services/reward.service";
 
 @Component({
 	selector: 'ba-item-icon',
@@ -40,6 +41,7 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 
 	constructor(
 		public readonly dataService: DataService,
+		public readonly rewardService: RewardService,
 		private readonly dialog: MatDialog,
 		private readonly changeDetectorRef: ChangeDetectorRef
 	) {}
@@ -80,7 +82,7 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 	}
 
 	handleBlurStock() {
-		this.dataService.deck.selectedSquad.updateRequiredItems(this.dataService);
+		this.dataService.deck.selectedSquad.updateRequiredItems(this.dataService, this.rewardService);
 	}
 
 	handleClickIcon() {

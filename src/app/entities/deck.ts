@@ -8,6 +8,7 @@ import { DeckStocks, transformStocks, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
 
 import type { DataService } from '../services/data.service';
+import { RewardService } from "../services/reward.service";
 export const GACHA_END_OFFSET = 5000000;
 export const GACHA_OFFSET = 4000000;
 export const CURRENCY_OFFSET = 3000000;
@@ -60,7 +61,7 @@ export class Deck {
 
 	readonly change$ = new Subject<Changes<Deck>>();
 
-	hydrate(dataService: DataService) {
+	hydrate(dataService: DataService, rewardService: RewardService) {
 		if (this.options == null) {
 			this.options = new DeckOptions();
 		}
@@ -92,16 +93,16 @@ export class Deck {
 		}
 
 		for (const deckSquad of this.squads) {
-			deckSquad.hydrate(dataService);
+			deckSquad.hydrate(dataService, rewardService);
 		}
 
 		this.selectedSquadId = this.selectedSquadId ?? 0;
 	}
 
-	addSquad(dataService: DataService) {
+	addSquad(dataService: DataService, rewardService: RewardService) {
 		const deckSquad = new DeckSquad();
 		this.squads.push(deckSquad);
-		deckSquad.hydrate(dataService);
+		deckSquad.hydrate(dataService, rewardService);
 	}
 
 	removeSquad(dataService: DataService) {

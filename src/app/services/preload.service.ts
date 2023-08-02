@@ -6,6 +6,7 @@ import { Inject, Injectable } from "@angular/core";
 import { CDN_BASE } from '../entities/constant';
 import { DataService } from './data.service';
 import { APP_BASE_HREF } from "@angular/common";
+import { RewardService } from "./reward.service";
 
 const STORAGE_LANGUAGE_KEY = 'language';
 const STORAGE_REGION_KEY = 'region';
@@ -15,7 +16,7 @@ const STORAGE_DECK_KEY = 'deck';
 	providedIn: 'root',
 })
 export class PreloadService {
-	constructor(private dataService: DataService, @Inject(APP_BASE_HREF) private baseHref: string) {}
+	constructor(private dataService: DataService, @Inject(APP_BASE_HREF) private baseHref: string, private rewardService: RewardService) {}
 
 	static initialize(preloadService: PreloadService) {
 		return () => preloadService.load();
@@ -131,11 +132,11 @@ export class PreloadService {
 	async loadDeck() {
 		const compressed = localStorage.getItem(STORAGE_DECK_KEY) ?? '';
 		if (compressed === '') {
-			return this.dataService.setDeck({});
+			return this.dataService.setDeck({}, this.rewardService);
 		}
 		const json = decompressFromUTF16(compressed) ?? '{}';
 		const plain = JSON.parse(json);
-		return this.dataService.setDeck(plain);
+		return this.dataService.setDeck(plain, this.rewardService);
 	}
 
 	async exportData() {

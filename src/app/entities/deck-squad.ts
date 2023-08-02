@@ -2,13 +2,14 @@ import { Exclude, Expose, Type } from "class-transformer";
 import { debounceTime, filter, Subject, Subscription } from "rxjs";
 
 import { Change, Changes } from "./change";
-import { ACTION_POINT_ID } from "./deck";
+import { ACTION_POINT_ID, CURRENCY_OFFSET, GACHA_END_OFFSET, GACHA_OFFSET } from "./deck";
 import { DeckStocks, DeckStocksClear, wrapStocks } from "./deck-stocks";
 import { DeckStudent } from "./deck-student";
 import { CampaignDifficulty, StuffCategory } from "./enum";
 import { ElephSortOption, ItemSortOption, StudentSortOption } from "./types";
 
 import type { DataService } from "../services/data.service";
+import { RewardService } from "../services/reward.service";
 
 @Exclude()
 export class DeckSquad {
@@ -32,7 +33,7 @@ export class DeckSquad {
 	readonly requiredStaled$ = new Subject<void>();
 	readonly requiredUpdated$ = new Subject<void>();
 
-	hydrate(dataService: DataService) {
+	hydrate(dataService: DataService, rewardService: RewardService) {
 		this.id = dataService.deck.squads.indexOf(this);
 
 		// i18n
@@ -86,7 +87,7 @@ export class DeckSquad {
 				debounceTime(200)
 			)
 			.subscribe(() => {
-				this.updateRequiredItems(dataService);
+				this.updateRequiredItems(dataService, rewardService);
 			});
 
 		for (const studentId of this.students) {
@@ -118,7 +119,7 @@ export class DeckSquad {
 		return true;
 	}
 
-	updateRequiredItems(dataService: DataService) {
+	updateRequiredItems(dataService: DataService, rewardService: RewardService) {
 		this.required[DeckStocksClear]();
 
 		for (const studentId of this.students) {
@@ -128,11 +129,11 @@ export class DeckSquad {
 			}
 		}
 
-		this.updateStages(dataService);
+		this.updateStages(dataService, rewardService);
 		this.requiredUpdated$.next();
 	}
 
-	updateStages(dataService: DataService) {
+	updateStages(dataService: DataService, rewardService: RewardService) {
 		const candidates = dataService.stages.campaign
 			.filter((campaign) => dataService.deck.options.showCampaignHard || campaign.difficulty !== CampaignDifficulty.Hard)
 			.filter((campaign) => !dataService.deck.options.showOnlyCampaignHard || campaign.difficulty === CampaignDifficulty.Hard)
@@ -141,8 +142,11 @@ export class DeckSquad {
 				let weight = 0;
 				const cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 				if (cost > 0) {
-
-					for (let [rewardId, rate] of campaign.regionalRewards(dataService).default) {
+					const baseRewards = campaign.regionalRewards(dataService)?.default;
+					const dropRewards = baseRewards?.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
+					const gachaRewards = baseRewards?.filter((reward) => reward[0] >= GACHA_OFFSET && reward[0] < GACHA_END_OFFSET).flatMap((reward) => rewardService.convertGachaRewards(reward))
+					const rewards = rewardService.mergeRewards(dropRewards, gachaRewards)
+					for (let [rewardId, rate] of rewards) {
 						const required = this.required[rewardId];
 						if (required > 0) {
 							let scale = 1;

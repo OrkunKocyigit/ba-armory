@@ -8,6 +8,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { StudentSortOption } from '../../entities/types';
 import { DataService } from '../../services/data.service';
 import { SelectorComponent } from '../selector/selector.component';
+import { RewardService } from "../../services/reward.service";
 
 @Component({
 	selector: 'ba-armory',
@@ -31,6 +32,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 
 	constructor(
 		public readonly dataService: DataService,
+		public readonly rewardService: RewardService,
 		private readonly dialog: MatDialog,
 		private readonly changeDetectorRef: ChangeDetectorRef
 	) {}
@@ -56,7 +58,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		this.requiredUpdatedSubscription = this.dataService.deck.selectedSquad.requiredUpdated$.subscribe(() => {
 			this.changeDetectorRef.markForCheck();
 		});
-		this.dataService.deck.selectedSquad.updateRequiredItems(this.dataService);
+		this.dataService.deck.selectedSquad.updateRequiredItems(this.dataService, this.rewardService);
 		this.changeDetectorRef.markForCheck();
 	}
 
@@ -98,7 +100,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 	}
 
 	handleClickSquadAdd() {
-		this.dataService.deck.addSquad(this.dataService);
+		this.dataService.deck.addSquad(this.dataService, this.rewardService);
 	}
 
 	handleClickSquadRemove() {

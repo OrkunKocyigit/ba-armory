@@ -11,6 +11,7 @@ import { Localization } from '../entities/localization';
 import { Stage } from '../entities/stage';
 import { Student } from '../entities/student';
 import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption } from '../entities/types';
+import { RewardService } from "./reward.service";
 
 @Injectable({
 	providedIn: 'root',
@@ -294,12 +295,12 @@ export class DataService {
 		];
 	}
 
-	setDeck(json: any) {
+	setDeck(json: any, rewardService: RewardService) {
 		plainToClassFromExist(this.deck, json, {
 			excludeExtraneousValues: true,
 			exposeDefaultValues: true,
 		});
-		this.deck.hydrate(this);
+		this.deck.hydrate(this, rewardService);
 	}
 
 	getEquipmentTier(equipmentCategory: EquipmentCategory, tier: number) {
