@@ -5,8 +5,8 @@
 	[class.is_target-reached]="model.tier === model.tierTarget"
 	[title]="name"
 	[attr.tier]="tier"
-	(hoverinput)="tier = $event"
+	(hiHoverInputNumber)="tier = $event"
 >
-	<img class="icon" loading="lazy" [src]="iconUrl" />
+	<img class="icon" loading="lazy" [src]="iconUrl" alt="icon" />
 	<div class="tier">T{{ tier }}</div>
 </div>

@@ -9,6 +9,7 @@ export interface I18N {
 	footer_3_end: string;
 	action_export: string;
 	action_import: string;
+	action_save_remote: string;
 	action_setting: string;
 	action_save: string;
 	action_saved: string;
@@ -23,9 +24,12 @@ export interface I18N {
 	student_action_remove: string;
 	student_action_upgrade: string;
 	student_action_target: string;
+	selector_show_duplicated_students: string;
 	squad_name: string;
 	squad_action_remove: string;
+	squad_action_pin: string;
 	item_show_surplus_items: string;
+	item_show_required_items: string;
 	item_show_elephs: string;
 	campaign_show_campaign_hard: string;
 	campaign_show_only_campaign_hard: string;

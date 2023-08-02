@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 
-import { CDN_BASE } from './constant';
+import { environment } from '../../environments/environment';
 import { EquipmentRarity, EquipmentRecipe, EquipmentStatType, EquipmentStatValue, IsReleased, ItemCategory, StuffCategory } from './enum';
 
 export class Equipment {
@@ -39,13 +39,13 @@ export class Equipment {
 
 	get iconUrl() {
 		if (this.isItem()) {
-			return `${CDN_BASE}/images/items/${this.icon}.png`;
+			return `${environment.CDN_BASE}/images/items/${this.icon}.png`;
 		}
-		return `${CDN_BASE}/images/equipment/${this.icon}.png`;
+		return `${environment.CDN_BASE}/images/equipment/${this.icon}.png`;
 	}
 
 	isItem() {
-		return this.category === StuffCategory.Material || this.category === StuffCategory.SecretStone;
+		return this.category === StuffCategory.Material || this.category === StuffCategory.SecretStone || this.category === StuffCategory.Favor;
 	}
 
 	isEquipment() {

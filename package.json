@@ -1,6 +1,7 @@
 {
 	"name": "ba-armory",
 	"version": "0.0.0",
+	"type": "module",
 	"scripts": {
 		"format": "prettier --write ./src",
 		"ng": "ng",
@@ -31,10 +32,14 @@
 		"@angular/platform-browser-dynamic": "^14.1.0",
 		"@angular/router": "^14.1.0",
 		"@angular/service-worker": "^14.1.0",
+		"@supabase/supabase-js": "^2.22.0",
+		"@vercel/node": "^2.14.3",
 		"class-transformer": "^0.5.1",
 		"lz-string": "^1.4.4",
 		"ngx-bar-rating": "^4.0.1",
+		"ngx-hover-input": "^1.0.0",
 		"ngx-sortablejs-simple": "^1.1.1",
+		"prop-change-decorators": "^1.0.1",
 		"rxjs": "~7.5.0",
 		"sortablejs": "^1.15.0",
 		"tslib": "^2.3.0",

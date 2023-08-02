@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { DataService } from "./data.service";
 import { Reward } from "../entities/enum";
-import { GACHA_END_OFFSET, GACHA_OFFSET } from "../entities/deck";
+import { CURRENCY_OFFSET, GACHA_END_OFFSET, GACHA_OFFSET } from "../entities/deck";
+import { Campaign } from "../entities/stage";
 
 @Injectable({
 	providedIn: "root"
@@ -44,5 +45,12 @@ export class RewardService {
 			}
 		}
 		return rewards
+	}
+
+	createRewardForCampaign(campaign: Campaign) {
+		let baseRewards = campaign.regionalRewards(this.dataService)?.default;
+		let dropRewards = baseRewards?.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
+		const gachaRewards = baseRewards?.filter((reward) => reward[0] >= GACHA_OFFSET && reward[0] < GACHA_END_OFFSET).flatMap((reward) => this.convertGachaRewards(reward))
+		return this.mergeRewards(dropRewards, gachaRewards)
 	}
 }

@@ -5,9 +5,9 @@
 	[class.is_target-reached]="model.level === model.levelTarget"
 	[title]="name"
 	[attr.level]="level"
-	(hoverinput)="level = $event"
+	(hiHoverInputNumber)="level = $event"
 >
 	<div class="skill_type">{{ skillTypeText }}</div>
-	<img [class]="'icon ' + typeClass" loading="lazy" [src]="iconUrl" />
+	<img [class]="'icon ' + typeClass" loading="lazy" [src]="iconUrl" alt="icon" />
 	<div class="level">{{ level === model.levelMax ? "MAX" : "Lv." + level }}</div>
 </div>

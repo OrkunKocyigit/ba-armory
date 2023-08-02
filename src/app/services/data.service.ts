@@ -1,16 +1,16 @@
-import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { plainToClassFromExist, plainToInstance } from "class-transformer";
 
-import { Injectable } from '@angular/core';
-
-import { Common } from '../entities/common';
-import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
-import { ArmorType, BulletType, EquipmentCategory, ItemCategory, SkillType, StuffCategory } from '../entities/enum';
-import { Equipment } from '../entities/equipment';
-import { I18N } from '../entities/i18n';
-import { Localization } from '../entities/localization';
-import { Stage } from '../entities/stage';
-import { Student } from '../entities/student';
-import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption } from '../entities/types';
+import { Injectable } from "@angular/core";
+import { Common } from "../entities/common";
+import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from "../entities/deck";
+import { ArmorType, BulletType, EquipmentCategory, ItemCategory, SkillType, StuffCategory, Terrain } from "../entities/enum";
+import { Equipment } from "../entities/equipment";
+import { I18N } from "../entities/i18n";
+import { EXTRA_ICONS, RAID_ICONS } from "../entities/icons";
+import { Localization } from "../entities/localization";
+import { Stage } from "../entities/stage";
+import { Student } from "../entities/student";
+import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption, TerrainOption } from "../entities/types";
 import { RewardService } from "./reward.service";
 
 @Injectable({
@@ -35,6 +35,8 @@ export class DataService {
 	localization: Localization;
 	i18n: I18N;
 
+	icons: string[] = [];
+
 	deck: Deck = new Deck();
 
 	starSecretStoneAmount = [0, 0, 30, 110, 210, 330];
@@ -45,6 +47,8 @@ export class DataService {
 
 	studentLevelMax = 0;
 	weaponLevelMax = 0;
+
+	adaptaionAmount = ['D', 'C', 'B', 'A', 'S', 'SS'];
 
 	regionOptions: RegionOption[] = [
 		{ id: 0, label: 'Japan' },
@@ -60,6 +64,10 @@ export class DataService {
 	studentSortOptions: StudentSortOption[] = [];
 	itemSortOptions: ItemSortOption[] = [];
 	elephSortOptions: ElephSortOption[] = [];
+
+	terrainOptions: TerrainOption[] = [];
+
+	link = '';
 
 	constructor() {}
 
@@ -137,14 +145,15 @@ export class DataService {
 			}).map((item) => [item.id, item])
 		);
 
-		for (const [id, item] of this.items) {
+		for (const [_, item] of this.items) {
 			if (
 				(item.category === StuffCategory.Material &&
 					(item.tags.includes('MaterialItem') ||
 						item.tags.includes('CDItem') ||
 						item.tags.includes('BookItem') ||
 						item.tags.includes('ShiftingCraftCategory_BookItem'))) ||
-				item.tags.includes('SecretStone')
+				item.tags.includes('SecretStone') ||
+				item.tags.includes('FavorItem')
 			) {
 				this.stockables.push(item.id);
 			}
@@ -168,6 +177,17 @@ export class DataService {
 	}
 
 	setOthers() {
+		this.icons.push(...RAID_ICONS);
+		this.icons.push(...EXTRA_ICONS);
+		const schoolIcons: string[] = [];
+		for (const [, student] of this.students) {
+			this.icons.push(student.collectionTextureUrl);
+			if (!schoolIcons.includes(student.schoolIconUrl)) {
+				schoolIcons.push(student.schoolIconUrl);
+			}
+		}
+		this.icons.push(...schoolIcons);
+
 		this.studentSortOptions = [
 			{
 				id: 'level',
@@ -293,6 +313,11 @@ export class DataService {
 				key: [(student) => -this.deck.selectedSquad.required[student.id], (student) => -student.id],
 			},
 		];
+
+		this.terrainOptions = [Terrain.Street, Terrain.Outdoor, Terrain.Indoor].map((terrain) => ({
+			id: terrain,
+			label: this.localization.AdaptationType[terrain],
+		}));
 	}
 
 	setDeck(json: any, rewardService: RewardService) {

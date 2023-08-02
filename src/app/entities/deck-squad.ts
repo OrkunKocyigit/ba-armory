@@ -1,12 +1,12 @@
 import { Exclude, Expose, Type } from "class-transformer";
+import { Change, ChangeDispatcher, dispatchChanges, Dispatcher } from "prop-change-decorators";
 import { debounceTime, filter, Subject, Subscription } from "rxjs";
 
-import { Change, Changes } from "./change";
-import { ACTION_POINT_ID, CURRENCY_OFFSET, GACHA_END_OFFSET, GACHA_OFFSET } from "./deck";
+import { ACTION_POINT_ID } from "./deck";
 import { DeckStocks, DeckStocksClear, wrapStocks } from "./deck-stocks";
 import { DeckStudent } from "./deck-student";
-import { CampaignDifficulty, StuffCategory } from "./enum";
-import { ElephSortOption, ItemSortOption, StudentSortOption } from "./types";
+import { CampaignDifficulty, StuffCategory, Terrain } from "./enum";
+import { ElephSortOption, ItemSortOption, SortOption, StudentSortOption } from "./types";
 
 import type { DataService } from "../services/data.service";
 import { RewardService } from "../services/reward.service";
@@ -15,12 +15,21 @@ import { RewardService } from "../services/reward.service";
 export class DeckSquad {
 	id: number = 0;
 
+	@Expose({ name: 'icon' })
+	icon: string = '';
+
 	@Expose({ name: 'name' })
 	name: string = '';
+
+	@Expose({ name: 'terrain' })
+	terrain: Terrain = Terrain.Street;
 
 	@Expose({ name: 'students' })
 	@Type(() => Number)
 	students: number[] = [];
+
+	@Expose({ name: 'pinned' })
+	pinned: boolean = false;
 
 	readonly required: DeckStocks = wrapStocks({});
 
@@ -29,9 +38,12 @@ export class DeckSquad {
 		amount: number;
 	}[] = [];
 
-	readonly change$ = new Subject<Changes<DeckSquad>>();
+	@Dispatcher()
+	readonly change$: ChangeDispatcher<DeckSquad>;
 	readonly requiredStaled$ = new Subject<void>();
 	readonly requiredUpdated$ = new Subject<void>();
+
+	autoIcon: string = '';
 
 	hydrate(dataService: DataService, rewardService: RewardService) {
 		this.id = dataService.deck.squads.indexOf(this);
@@ -41,7 +53,20 @@ export class DeckSquad {
 			this.name = `${dataService.i18n.squad_name} #${this.id + 1}`;
 		}
 
+		if (this.terrain == null) {
+			this.terrain = Terrain.Street;
+		}
+
+		if (this.pinned == null) {
+			this.pinned = false;
+		}
+
 		this.students = (this.students ?? []).filter((studentId) => dataService.students.has(studentId));
+
+		if (this.icon == null || this.icon === '') {
+			this.icon = '';
+		}
+		this.updateAutoIcon(dataService);
 
 		const changeSubscriptionMap = new Map<number, Subscription>();
 
@@ -72,6 +97,7 @@ export class DeckSquad {
 						this.requiredStaled$.next();
 					}
 				}
+				this.updateAutoIcon(dataService);
 			}
 		});
 
@@ -100,33 +126,41 @@ export class DeckSquad {
 		return this.students.includes(studentId);
 	}
 
-	addStudent(dataService: DataService, studentId: number) {
-		if (this.hasStudent(studentId)) return true;
+	addStudent(this: DeckSquad, dataService: DataService, studentId: number) {
+		if (!dataService.deck.options.showDuplicatedStudents && this.hasStudent(studentId)) return true;
 
 		if (!dataService.students.has(studentId)) return false;
 
 		this.students.push(studentId);
-		this.change$.next({ students: [new Change(undefined, studentId)] });
+		dispatchChanges(this, { students: [new Change(undefined, studentId)] });
+
 		return true;
 	}
 
-	removeStudent(studentId: number) {
+	removeStudent(this: DeckSquad, studentId: number) {
 		const index = this.students.indexOf(studentId);
 		if (index === -1) return false;
 
 		const deckStudent = this.students.splice(index, 1);
-		this.change$.next({ students: [new Change(deckStudent[0], undefined)] });
+		dispatchChanges(this, { students: [new Change(deckStudent[0], undefined)] });
+
 		return true;
 	}
 
 	updateRequiredItems(dataService: DataService, rewardService: RewardService) {
 		this.required[DeckStocksClear]();
 
+		const counted = new Set<number>();
 		for (const studentId of this.students) {
+			if (counted.has(studentId)) continue;
+
 			const deckStudent = dataService.deck.students.get(studentId);
+
 			for (const [id, amount] of deckStudent.requiredItems) {
 				this.required[id] += amount;
 			}
+
+			counted.add(studentId);
 		}
 
 		this.updateStages(dataService, rewardService);
@@ -142,10 +176,7 @@ export class DeckSquad {
 				let weight = 0;
 				const cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 				if (cost > 0) {
-					const baseRewards = campaign.regionalRewards(dataService)?.default;
-					const dropRewards = baseRewards?.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
-					const gachaRewards = baseRewards?.filter((reward) => reward[0] >= GACHA_OFFSET && reward[0] < GACHA_END_OFFSET).flatMap((reward) => rewardService.convertGachaRewards(reward))
-					const rewards = rewardService.mergeRewards(dropRewards, gachaRewards)
+					const rewards = rewardService.createRewardForCampaign(campaign)
 					for (let [rewardId, rate] of rewards) {
 						const required = this.required[rewardId];
 						if (required > 0) {
@@ -173,7 +204,8 @@ export class DeckSquad {
 			.slice(0, 20)
 			.map(({ campaign }) => {
 				let amount = 0;
-				for (let [rewardId, rate] of campaign.regionalRewards(dataService).default) {
+				const rewards = rewardService.createRewardForCampaign(campaign)
+				for (let [rewardId, rate] of rewards) {
 					const required = this.required[rewardId];
 					if (required > 0) amount = Math.max(amount, Math.max(0, required - dataService.deck.stocks[rewardId]) / rate);
 				}
@@ -184,27 +216,21 @@ export class DeckSquad {
 		this.stages.splice(0, this.stages.length, ...candidates);
 	}
 
+	updateAutoIcon(dataService: DataService) {
+		if (this.students.length > 0) {
+			this.autoIcon = dataService.students.get(this.students[0]).collectionTextureUrl;
+		} else {
+			this.autoIcon = '/assets/icons/icon-32x32.png';
+		}
+	}
+
 	sortStudents(dataService: DataService, option: StudentSortOption, direction: -1 | 1) {
 		if (option == null) {
 			this.students.reverse();
 			return;
 		}
-		const compare = (a: string | number, b: string | number) => {
-			return typeof a === 'string' && typeof b === 'string' ? a.localeCompare(b) : +a - +b;
-		};
 
-		this.students.sort((aId, bId) => {
-			const a = dataService.deck.students.get(aId);
-			const b = dataService.deck.students.get(bId);
-
-			for (const key of option.key) {
-				const aValue = key(a);
-				const bValue = key(b);
-				const diff = compare(aValue, bValue);
-				if (diff !== 0) return direction * diff;
-			}
-			return 0;
-		});
+		this.students.sort((aId, bId) => sortObject(dataService.deck.students.get(aId), dataService.deck.students.get(bId), option, direction));
 	}
 
 	sortItems(dataService: DataService, option: ItemSortOption, direction: -1 | 1) {
@@ -212,44 +238,39 @@ export class DeckSquad {
 			dataService.stockables.reverse();
 			return;
 		}
-		const compare = (a: string | number, b: string | number) => {
-			return typeof a === 'string' && typeof b === 'string' ? a.localeCompare(b) : +a - +b;
-		};
 
-		dataService.stockables.sort((aId, bId) => {
-			const a = dataService.getStuff(aId);
-			const b = dataService.getStuff(bId);
-
-			for (const key of option.key) {
-				const aValue = key(a);
-				const bValue = key(b);
-				const diff = compare(aValue, bValue);
-				if (diff !== 0) return direction * diff;
-			}
-			return 0;
-		});
+		dataService.stockables.sort((aId, bId) => sortObject(dataService.getStuff(aId), dataService.getStuff(bId), option, direction));
 	}
 
-	sortElephs(dataService: DataService, students: number[], option: ElephSortOption, direction: -1 | 1) {
+	sortElephs(dataService: DataService, ids: number[], option: ElephSortOption, direction: -1 | 1) {
 		if (option == null) {
-			students.reverse();
+			ids.reverse();
 			return;
 		}
-		const compare = (a: string | number, b: string | number) => {
-			return typeof a === 'string' && typeof b === 'string' ? a.localeCompare(b) : +a - +b;
-		};
 
-		students.sort((aId, bId) => {
-			const a = dataService.deck.students.get(aId);
-			const b = dataService.deck.students.get(bId);
+		ids.sort((aId, bId) => sortObject(dataService.deck.students.get(aId), dataService.deck.students.get(bId), option, direction));
+	}
 
-			for (const key of option.key) {
-				const aValue = key(a);
-				const bValue = key(b);
-				const diff = compare(aValue, bValue);
-				if (diff !== 0) return direction * diff;
-			}
-			return 0;
-		});
+	sortGears(dataService: DataService, ids: number[], option: ItemSortOption, direction: -1 | 1) {
+		if (option == null) {
+			ids.reverse();
+			return;
+		}
+
+		ids.sort((aId, bId) => sortObject(dataService.getStuff(aId), dataService.getStuff(bId), option, direction));
 	}
 }
+
+const compare = (a: string | number, b: string | number) => {
+	return typeof a === 'string' && typeof b === 'string' ? a.localeCompare(b) : +a - +b;
+};
+
+const sortObject = <T>(a: T, b: T, option: SortOption<T>, direction: -1 | 1) => {
+	for (const key of option.key) {
+		const aValue = key(a);
+		const bValue = key(b);
+		const diff = compare(aValue, bValue);
+		if (diff !== 0) return direction * diff;
+	}
+	return 0;
+};

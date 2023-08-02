@@ -6,9 +6,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ExportComponent } from './export.component';
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
 	declarations: [ExportComponent],
-	imports: [CommonModule, FormsModule, MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatButtonModule, MatDividerModule, MatIconModule, MatDialogModule]
 })
 export class ExportModule {}

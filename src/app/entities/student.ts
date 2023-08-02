@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 
-import { CDN_BASE } from './constant';
+import { environment } from '../../environments/environment';
 import {
 	AdaptationType,
 	ArmorType,
@@ -73,6 +73,8 @@ export class Student {
 	isReleased: IsReleased;
 	@Expose({ name: 'DefaultOrder' })
 	defaultOrder: number;
+	@Expose({ name: 'PathName' })
+	pathName: string;
 	@Expose({ name: 'DevName' })
 	devName: string;
 	@Expose({ name: 'Name' })
@@ -221,14 +223,18 @@ export class Student {
 	skillMaterialAmount: Array<number[]>;
 
 	get collectionTextureUrl() {
-		return `${CDN_BASE}/images/student/icon/${this.collectionTexture}.png`;
+		return `${environment.CDN_BASE}/images/student/icon/${this.collectionTexture}.png`;
 	}
 
 	get collectionBGUrl() {
-		return `${CDN_BASE}/images/background/${this.collectionBG}.jpg`;
+		return `${environment.CDN_BASE}/images/background/${this.collectionBG}.jpg`;
 	}
 
 	get schoolIconUrl() {
-		return `${CDN_BASE}/images/schoolicon/School_Icon_${this.school.toUpperCase()}_W.png`;
+		return `${environment.CDN_BASE}/images/schoolicon/School_Icon_${this.school.toUpperCase()}_W.png`;
+	}
+
+	get gearIconUrl() {
+		return `${environment.CDN_BASE}/images/gear/${this.gear?.icon ?? 'Gear_Icon_Empty'}.png`;
 	}
 }

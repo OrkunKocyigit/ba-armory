@@ -2,7 +2,7 @@ import { Subscription } from "rxjs";
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 
-import { ACTION_POINT_ID, CURRENCY_OFFSET, GACHA_END_OFFSET, GACHA_OFFSET } from "../../entities/deck";
+import { ACTION_POINT_ID } from "../../entities/deck";
 import { CampaignDifficulty, Reward } from "../../entities/enum";
 import { DataService } from "../../services/data.service";
 import { RewardService } from "../../services/reward.service";
@@ -49,10 +49,7 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 		this.stage = campaign.stage;
 		this.name = campaign.name;
 		this.iconUrl = campaign.iconUrl;
-		let baseRewards = campaign.regionalRewards(this.dataService)?.default;
-		let dropRewards = baseRewards?.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
-		const gachaRewards = baseRewards?.filter((reward) => reward[0] >= GACHA_OFFSET && reward[0] < GACHA_END_OFFSET).flatMap((reward) => this.rewardService.convertGachaRewards(reward))
-		this.rewards = this.rewardService.mergeRewards(dropRewards, gachaRewards)
+		this.rewards = this.rewardService.createRewardForCampaign(campaign)
 		this.cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {

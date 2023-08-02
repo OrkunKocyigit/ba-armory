@@ -3,7 +3,7 @@ import { compressToBase64, compressToUTF16, decompressFromBase64, decompressFrom
 
 import { Inject, Injectable } from "@angular/core";
 
-import { CDN_BASE } from '../entities/constant';
+import { environment } from '../../environments/environment';
 import { DataService } from './data.service';
 import { APP_BASE_HREF } from "@angular/common";
 import { RewardService } from "./reward.service";
@@ -30,12 +30,12 @@ export class PreloadService {
 		await this.loadSetting();
 
 		const language = this.dataService.language;
-		const commonSource = `${CDN_BASE}/data/common.min.json`;
-		const itemsSource = `${CDN_BASE}/data/${language}/items.min.json`;
-		const equipmentsSource = `${CDN_BASE}/data/${language}/equipment.min.json`;
-		const studentsSource = `${CDN_BASE}/data/${language}/students.min.json`;
-		const stagesSource = `${CDN_BASE}/data/stages.min.json`;
-		const localizationSource = `${CDN_BASE}/data/${language}/localization.min.json`;
+		const commonSource = `${environment.CDN_BASE}/data/common.min.json`;
+		const itemsSource = `${environment.CDN_BASE}/data/${language}/items.min.json`;
+		const equipmentsSource = `${environment.CDN_BASE}/data/${language}/equipment.min.json`;
+		const studentsSource = `${environment.CDN_BASE}/data/${language}/students.min.json`;
+		const stagesSource = `${environment.CDN_BASE}/data/stages.min.json`;
+		const localizationSource = `${environment.CDN_BASE}/data/${language}/localization.min.json`;
 		const i18nSource = `./assets/i18n/${language}.json`;
 
 		const [common, items, equipments, students, stages, localization, i18n] = await Promise.all([
@@ -89,7 +89,7 @@ export class PreloadService {
 		let initialize = false;
 		let forceLanguage = false;
 
-		const path = location.pathname.replace('/', '');
+		const path = location.pathname.split('/')?.[1] ?? '';
 		if (path !== '') {
 			const language = this.mapLanguage(path);
 			if (language !== '') {
@@ -130,12 +130,55 @@ export class PreloadService {
 	}
 
 	async loadDeck() {
-		const compressed = localStorage.getItem(STORAGE_DECK_KEY) ?? '';
-		if (compressed === '') {
-			return this.dataService.setDeck({}, this.rewardService);
+		const id = location.pathname.split('/').pop() ?? '';
+
+		if (id.length === 8) {
+			try {
+				await this.loadRemote(id);
+				return;
+			} catch (_: unknown) {}
 		}
-		const json = decompressFromUTF16(compressed) ?? '{}';
+
+		try {
+			const compressed = localStorage.getItem(STORAGE_DECK_KEY) ?? '';
+			if (compressed === '') throw new Error();
+
+			const json = decompressFromUTF16(compressed) ?? '{}';
+			const plain = JSON.parse(json);
+			return this.dataService.setDeck(plain, this.rewardService);
+		} catch (_: unknown) {}
+
+		return this.dataService.setDeck({}, this.rewardService);
+	}
+
+	async saveRemote() {
+		const data = await this.exportData();
+		const response = await fetch(`${environment.SAVE_API}`, {
+			method: `POST`,
+			headers: [[`Content-Type`, `application/json`]],
+			body: JSON.stringify({ data }),
+		});
+
+		const save: { id: string; error: string; status: number; statusText: string } = await response.json();
+
+		if (!response.ok) {
+			throw new Error(save.error);
+		}
+
+		return save.id;
+	}
+
+	async loadRemote(id: string) {
+		const response = await fetch(`${environment.SAVE_API}/${id}`);
+		const save: { data: string; error: string; status: number; statusText: string } = await response.json();
+
+		if (!response.ok) {
+			throw new Error(save.error);
+		}
+
+		const json = decompressFromBase64(save.data);
 		const plain = JSON.parse(json);
+		if (plain == null || typeof plain !== 'object') throw new TypeError();
 		return this.dataService.setDeck(plain, this.rewardService);
 	}
 

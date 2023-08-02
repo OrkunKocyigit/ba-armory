@@ -9,6 +9,7 @@
 	"footer_3_end": "",
 	"action_export": "导出",
 	"action_import": "导入",
+	"action_save_remote": "导出链接",
 	"action_setting": "设定",
 	"action_save": "保存",
 	"action_saved": "已保存",
@@ -23,9 +24,12 @@
 	"student_action_remove": "移除",
 	"student_action_upgrade": "当前最高",
 	"student_action_target": "目标",
+	"selector_show_duplicated_students": "允许重复学生",
 	"squad_name": "队伍",
 	"squad_action_remove": "移除队伍",
+	"squad_action_pin": "固定队伍",
 	"item_show_surplus_items": "显示溢出",
+	"item_show_required_items": "显示需要",
 	"item_show_elephs": "显示神名文字",
 	"campaign_show_campaign_hard": "显示Hard任务",
 	"campaign_show_only_campaign_hard": "Show Only Hard Campaign",
@@ -38,6 +42,6 @@
 	"item_sort_stock": "库存",
 	"eleph_sort_basic": "基本",
 	"eleph_sort_total": "总购买价格",
-	"eleph_sort_deficit": "",
-	"eleph_sort_required": ""
+	"eleph_sort_deficit": "缺少",
+	"eleph_sort_required": "需要"
 }

@@ -1,79 +1,81 @@
 import { Exclude, Expose, plainToInstance, Type } from 'class-transformer';
+import { Change, ChangeDispatcher, Clamp, ClampTarget, dispatchChanges, Dispatcher, WatchBoolean } from 'prop-change-decorators';
 import { debounceTime, filter, merge, of, Subject } from 'rxjs';
 
-import { Stat, StatTarget } from '../decorators/stat';
-import { Change, Changes } from './change';
 import { ELIGMA_ID } from './deck';
 import { DeckEquipment } from './deck-equipment';
 import { DeckSkill } from './deck-skill';
-import { SkillType } from './enum';
+import { SkillType, Terrain } from './enum';
 import { Student } from './student';
 
 import type { DataService } from '../services/data.service';
+
 @Exclude()
 export class DeckStudent {
 	@Expose({ name: 'id' })
 	readonly id: number = 0;
 
 	@Expose({ name: 'level' })
-	@Stat({ name: 'level' })
+	@Clamp({ name: 'level' })
 	private __level__: number = 1;
 	public level: number;
 	@Expose({ name: 'levelTarget' })
-	@StatTarget({ name: 'level' })
+	@ClampTarget({ name: 'level' })
 	private __levelTarget__: number = 0;
 	levelTarget: number;
 	readonly levelMin: number = 1;
 	readonly levelMax: number = 0;
 
 	@Expose({ name: 'star' })
-	@Stat({ name: 'star' })
+	@Clamp({ name: 'star' })
 	private __star__: number = 1;
 	public star: number;
 	@Expose({ name: 'starTarget' })
-	@StatTarget({ name: 'star' })
+	@ClampTarget({ name: 'star' })
 	private __starTarget__: number = 0;
 	starTarget: number;
 	readonly starMin: number = 0;
 	readonly starMax: number = 5;
 
 	@Expose({ name: 'weapon' })
-	@Stat({ name: 'weapon' })
+	@Clamp({ name: 'weapon' })
 	private __weapon__: number = 1;
 	weapon: number;
 	@Expose({ name: 'weaponTarget' })
-	@StatTarget({ name: 'weapon' })
+	@ClampTarget({ name: 'weapon' })
 	private __weaponTarget__: number = 0;
 	weaponTarget: number;
 	readonly weaponMin: number = 0;
 	readonly weaponMax: number = 3;
 
+	@Expose({ name: 'gear' })
+	@Clamp({ name: 'gear' })
+	private __gear__: number = 0;
+	gear: number;
+	@Expose({ name: 'gearTarget' })
+	@ClampTarget({ name: 'gear' })
+	private __gearTarget__: number = 0;
+	gearTarget: number;
+	readonly gearMin: number = 0;
+	readonly gearMax: number = 2;
+
 	@Expose({ name: 'elephCost' })
-	@Stat({ name: 'elephCost', target: false })
+	@Clamp({ name: 'elephCost', target: '' })
 	private __elephCost__: number = 1;
 	elephCost: number;
 	readonly elephCostMin: number = 1;
 	readonly elephCostMax: number = 5;
 
 	@Expose({ name: 'elephRemain' })
-	@Stat({ name: 'elephRemain', target: false })
+	@Clamp({ name: 'elephRemain', target: '' })
 	private __elephRemain__: number = 20;
 	elephRemain: number;
 	readonly elephRemainMin: number = 0;
 	readonly elephRemainMax: number = 20;
 
+	@WatchBoolean({ name: 'isTarget' })
 	private __isTarget__: boolean = false;
-	get isTarget(): boolean {
-		return this.__isTarget__;
-	}
-	set isTarget(isTarget: boolean) {
-		isTarget = !!isTarget;
-		if (this.__isTarget__ !== isTarget) {
-			const isTargetOld = this.__isTarget__;
-			this.__isTarget__ = isTarget;
-			this.change$.next({ isTarget: new Change(isTargetOld as false, this.__isTarget__ as false) });
-		}
-	}
+	isTarget: boolean;
 
 	@Expose({ name: 'skills' })
 	@Type(() => DeckSkill)
@@ -85,7 +87,8 @@ export class DeckStudent {
 
 	readonly requiredItems = new Map<number, number>();
 
-	readonly change$ = new Subject<Changes<DeckStudent>>();
+	@Dispatcher()
+	readonly change$: ChangeDispatcher<DeckStudent>;
 	readonly requiredUpdated$ = new Subject<void>();
 
 	static fromStudent(dataService: DataService, student: Student) {
@@ -96,6 +99,7 @@ export class DeckStudent {
 				level: 1,
 				star: student.starGrade,
 				weapon: 0,
+				gear: 0,
 				elephCost: 1,
 				elephRemain: 20,
 				skills: student.skills.map((_, skillIndex) => ({
@@ -116,19 +120,35 @@ export class DeckStudent {
 
 		(this as { levelMax: number }).levelMax = dataService.studentLevelMax;
 		(this as { starMin: number }).starMin = student.starGrade;
+		(this as { gearMax: number }).gearMax = student.gear?.tierUpMaterial?.length ? student.gear.tierUpMaterial.length + 1 : 0;
 
 		this.level = this.level;
 		this.star = this.star;
 		this.weapon = this.weapon;
+		this.gear = this.gear;
 		this.elephCost = this.elephCost;
 		this.elephRemain = this.elephRemain ?? 20;
 
 		this.levelTarget = this.levelTarget ?? -1;
 		this.starTarget = this.starTarget ?? -1;
 		this.weaponTarget = this.weaponTarget ?? -1;
+		this.gearTarget = this.gearTarget ?? -1;
 
 		this.hydrateEquipments(dataService, student);
 		this.hydrateSkills(dataService, student);
+
+		this.change$.subscribe((changes) => {
+			if (changes.hasOwnProperty('star')) {
+				if (changes.star.currentValue < this.starMax && this.weapon > this.weaponMin) {
+					this.weapon = this.weaponMin;
+				}
+			}
+			if (changes.hasOwnProperty('starTarget')) {
+				if (changes.starTarget.currentValue < this.starMax && this.weaponTarget > this.weaponMin) {
+					this.weaponTarget = this.weaponMin;
+				}
+			}
+		});
 
 		merge(
 			of(null),
@@ -141,6 +161,8 @@ export class DeckStudent {
 						changes.hasOwnProperty('starTarget') ||
 						changes.hasOwnProperty('weapon') ||
 						changes.hasOwnProperty('weaponTarget') ||
+						changes.hasOwnProperty('gear') ||
+						changes.hasOwnProperty('gearTarget') ||
 						changes.hasOwnProperty('elephCost') ||
 						changes.hasOwnProperty('elephRemain')
 				),
@@ -152,7 +174,23 @@ export class DeckStudent {
 		});
 	}
 
-	private hydrateSkills(dataService: DataService, student: Student) {
+	getAdaptations(dataService: DataService): Record<Terrain, number> {
+		const student = dataService.students.get(this.id);
+
+		const adaptations = {
+			[Terrain.Indoor]: student.indoorBattleAdaptation,
+			[Terrain.Outdoor]: student.outdoorBattleAdaptation,
+			[Terrain.Street]: student.streetBattleAdaptation,
+		};
+
+		if (this.weapon === this.weaponMax) {
+			adaptations[student.weapon.adaptationType] += student.weapon.adaptationValue;
+		}
+
+		return adaptations;
+	}
+
+	private hydrateSkills(this: DeckStudent, dataService: DataService, student: Student) {
 		if (Array.isArray(this.skills)) {
 			this.skills.splice(4, this.skills.length);
 		}
@@ -169,31 +207,31 @@ export class DeckStudent {
 				),
 				{ excludeExtraneousValues: true, exposeDefaultValues: true }
 			);
-			this.change$.next({ skills: this.skills.map((skill) => new Change(undefined, skill)) });
+			dispatchChanges(this, { skills: this.skills.map((skill) => new Change(undefined, skill)) });
 		}
 
 		for (const deckSkill of this.skills) {
 			deckSkill.hydrate(dataService);
 			deckSkill.change$.subscribe((changes) => {
-				this.change$.next({ skills: { [deckSkill.index]: changes } });
+				dispatchChanges(this, { skills: { [deckSkill.index]: changes } });
 			});
 		}
 	}
 
-	private hydrateEquipments(dataService: DataService, student: Student) {
+	private hydrateEquipments(this: DeckStudent, dataService: DataService, student: Student) {
 		if (this.equipments == null || (Array.isArray(this.equipments) && this.equipments.length === 0)) {
 			(this as { equipments: DeckEquipment[] }).equipments = plainToInstance(
 				DeckEquipment,
 				student.equipment.map((_, equipmentIndex): Partial<DeckEquipment> => ({ studentId: student.id, index: equipmentIndex, tier: 0 })),
 				{ excludeExtraneousValues: true, exposeDefaultValues: true }
 			);
-			this.change$.next({ equipments: this.equipments.map((equipment) => new Change(undefined, equipment)) });
+			dispatchChanges(this, { equipments: this.equipments.map((equipment) => new Change(undefined, equipment)) });
 		}
 
 		for (const deckEquipment of this.equipments) {
 			deckEquipment.hydrate(dataService);
 			deckEquipment.change$.subscribe((changes) => {
-				this.change$.next({ equipments: { [deckEquipment.index]: changes } });
+				dispatchChanges(this, { equipments: { [deckEquipment.index]: changes } });
 			});
 		}
 	}
@@ -275,6 +313,29 @@ export class DeckStudent {
 					(this.requiredItems.get(student.id) ?? 0) +
 						Math.max(dataService.weaponSecretStoneAmount[toWeapon] - dataService.weaponSecretStoneAmount[fromWeapon], 0)
 				);
+			}
+		}
+
+		/* Gear */
+		{
+			const fromGear = Math.max(this.gear, 1);
+			const toGear = this.gearTarget;
+
+			if (fromGear < toGear) {
+				const gear = student.gear;
+
+				const tierMaterialIds = gear.tierUpMaterial;
+				const tierAmounts = gear.tierUpMaterialAmount;
+
+				for (let level = fromGear; level < toGear; level++) {
+					const materialIds = tierMaterialIds[level - 1];
+					const amounts = tierAmounts[level - 1];
+
+					for (let index = 0; index < materialIds.length; index++) {
+						const materialId = materialIds[index];
+						this.requiredItems.set(materialId, (this.requiredItems.get(materialId) ?? 0) + (amounts[index] ?? 0));
+					}
+				}
 			}
 		}
 

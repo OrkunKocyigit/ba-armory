@@ -1,12 +1,14 @@
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { SortableOptions } from 'sortablejs';
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
-import { StudentSortOption } from '../../entities/types';
+import { Terrain } from '../../entities/enum';
+import { StudentSortOption, TerrainOption } from '../../entities/types';
 import { DataService } from '../../services/data.service';
+import { IconSelectorComponent } from '../icon-selector/icon-selector.component';
 import { SelectorComponent } from '../selector/selector.component';
 import { RewardService } from "../../services/reward.service";
 
@@ -24,6 +26,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 	};
 
 	isTarget: boolean = false;
+	selectedTerrainOption: TerrainOption = undefined;
 	selectedStudentSortOption: StudentSortOption = undefined;
 	selectedStudentSortDirection: -1 | 1 = 1;
 
@@ -55,6 +58,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		this.isTarget = false;
 		this.selectedStudentSortOption = undefined;
 		this.requiredUpdatedSubscription?.unsubscribe();
+		this.handleClickSquadTerrainOption(this.dataService.deck.selectedSquad.terrain);
 		this.requiredUpdatedSubscription = this.dataService.deck.selectedSquad.requiredUpdated$.subscribe(() => {
 			this.changeDetectorRef.markForCheck();
 		});
@@ -62,7 +66,20 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		this.changeDetectorRef.markForCheck();
 	}
 
-	handleClickSelector() {
+	async handleClickIconSelector() {
+		const dialogRef = this.dialog.open(IconSelectorComponent, {
+			width: '100%',
+			height: 'auto',
+			maxHeight: 'calc(100% - var(--spacing-xx-large))',
+			autoFocus: false,
+			restoreFocus: false,
+		});
+
+		await firstValueFrom(dialogRef.afterClosed());
+		this.changeDetectorRef.markForCheck();
+	}
+
+	async handleClickSelector() {
 		const dialogRef = this.dialog.open(SelectorComponent, {
 			width: '100%',
 			height: 'auto',
@@ -71,7 +88,13 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 			restoreFocus: false,
 		});
 
-		dialogRef.afterClosed();
+		await firstValueFrom(dialogRef.afterClosed());
+		this.changeDetectorRef.markForCheck();
+	}
+
+	handleClickSquadTerrainOption(terrain: Terrain) {
+		this.selectedTerrainOption = this.dataService.terrainOptions.find((to) => to.id === terrain);
+		this.dataService.deck.selectedSquad.terrain = terrain;
 	}
 
 	handleClickStudentSortOption(sortOptionId: string) {
@@ -107,7 +130,11 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		this.dataService.deck.removeSquad(this.dataService);
 	}
 
-	handleMousedownSquadMove(event: MouseEvent) {
+	handleClickSquadPin() {
+		this.dataService.deck.selectedSquad.pinned = !this.dataService.deck.selectedSquad.pinned;
+	}
+
+	handleMousedownSquadStopPropagation(event: MouseEvent) {
 		event.stopPropagation();
 	}
 

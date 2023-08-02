@@ -16,9 +16,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ArmoryModule } from './pages/armory/armory.module';
 import { ExportModule } from './pages/export/export.module';
+import { IconSelectorModule } from './pages/icon-selector/icon-selector.module';
 import { SelectorModule } from './pages/selector/selector.module';
 import { SettingModule } from './pages/setting/setting.module';
-import { HoverinputModule } from './services/hoverinput';
 import { PreloadService } from './services/preload.service';
 import { APP_BASE_HREF } from "@angular/common";
 
@@ -29,11 +29,11 @@ import { APP_BASE_HREF } from "@angular/common";
 		BrowserAnimationsModule,
 		AppRoutingModule,
 		SortablejsModule,
-		HoverinputModule.forRoot(),
 
 		ArmoryModule,
 		ExportModule,
 		SelectorModule,
+		IconSelectorModule,
 		SettingModule,
 
 		MatButtonModule,
