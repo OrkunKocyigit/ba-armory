@@ -20,7 +20,7 @@ export class RewardService {
 		if (!group && !((group.Id >= 600000 && group.Id < 700000) || (group.Id >= 300000 && group.Id < 360000))) {
 			return []
 		}
-		const totalProbability = group.ItemList.reduce((pv, cv) => {return pv + cv[1]}, 0)
+		const totalProbability = group.ItemList.reduce((pv, cv) => {return pv + cv[1]}, 0) / reward[1]
 		const result: Reward[] = []
 		for (const item of group.ItemList) {
 			let [itemID, probability, ..._] = item
