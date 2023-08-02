@@ -2,9 +2,10 @@ import { Subscription } from "rxjs";
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 
-import { ACTION_POINT_ID, CURRENCY_OFFSET } from "../../entities/deck";
+import { ACTION_POINT_ID, CURRENCY_OFFSET, GACHA_END_OFFSET, GACHA_OFFSET } from "../../entities/deck";
 import { CampaignDifficulty, Reward } from "../../entities/enum";
 import { DataService } from "../../services/data.service";
+import { RewardService } from "../../services/reward.service";
 
 @Component({
 	selector: 'ba-campaign-card',
@@ -33,7 +34,7 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 	private changeSubscription: Subscription;
 	private requiredUpdatedSubscription: Subscription;
 
-	constructor(private readonly dataService: DataService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+	constructor(private readonly dataService: DataService, private readonly changeDetectorRef: ChangeDetectorRef, private readonly rewardService: RewardService) {}
 
 	ngOnInit(): void {
 		const campaign = this.dataService.stages.campaign.find((campaign) => campaign.id === this.id);
@@ -48,7 +49,10 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 		this.stage = campaign.stage;
 		this.name = campaign.name;
 		this.iconUrl = campaign.iconUrl;
-		this.rewards = campaign.regionalRewards(this.dataService)?.default.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
+		let baseRewards = campaign.regionalRewards(this.dataService)?.default;
+		let dropRewards = baseRewards?.filter((reward) => reward[0] < CURRENCY_OFFSET) ?? [];
+		const gachaRewards = baseRewards?.filter((reward) => reward[0] >= GACHA_OFFSET && reward[0] < GACHA_END_OFFSET).flatMap((reward) => this.rewardService.convertGachaRewards(reward))
+		this.rewards = this.rewardService.mergeRewards(dropRewards, gachaRewards)
 		this.cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {

@@ -8,6 +8,7 @@ import { DeckStocks, transformStocks, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
 
 import type { DataService } from '../services/data.service';
+export const GACHA_END_OFFSET = 5000000;
 export const GACHA_OFFSET = 4000000;
 export const CURRENCY_OFFSET = 3000000;
 export const EQUIPMENT_OFFSET = 2000000;
