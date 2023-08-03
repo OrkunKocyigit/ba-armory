@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1691049772668,
+  "timestamp": 1691049922974,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -95,7 +95,7 @@
     "/ba-armory/assets/icons/icon-72x72.png": "80180bc90b52c58bae0f9f22c665e3c9c49a05c2",
     "/ba-armory/assets/icons/icon-96x96.png": "196fe49ddc2a5dad1c684c9e0a3b61712e50ecdf",
     "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
-    "/ba-armory/index.html": "5e7e4e9feb2f21f50936ff32fc7decc867db3b07",
+    "/ba-armory/index.html": "557bcfa59a56169e28c308988e1b3321ad89bd64",
     "/ba-armory/main.bdf7fe36f523ec15.js": "7414883643efbbe2986aee2f0cd354d03a2ab441",
     "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
     "/ba-armory/polyfills.f0f271ab337134cb.js": "a2a76368894fc74a092fe880214a1eab643b3623",
