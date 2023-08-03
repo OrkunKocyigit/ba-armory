@@ -220,7 +220,7 @@ export class DeckSquad {
 		if (this.students.length > 0) {
 			this.autoIcon = dataService.students.get(this.students[0]).collectionTextureUrl;
 		} else {
-			this.autoIcon = '/assets/icons/icon-32x32.png';
+			this.autoIcon = './assets/icons/icon-32x32.png';
 		}
 	}
 
