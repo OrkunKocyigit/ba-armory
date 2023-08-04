@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1691050429298,
+  "timestamp": 1691182191450,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -13,11 +13,11 @@
       "urls": [
         "/ba-armory/favicon.ico",
         "/ba-armory/index.html",
-        "/ba-armory/main.a50c199409f6dcfb.js",
+        "/ba-armory/main.76df1d6fd9c6ffe7.js",
         "/ba-armory/manifest.webmanifest",
         "/ba-armory/polyfills.f0f271ab337134cb.js",
         "/ba-armory/runtime.845d4e9c25cc8fc8.js",
-        "/ba-armory/styles.49f817fd341c484b.css"
+        "/ba-armory/styles.9b0f726174c3036d.css"
       ],
       "patterns": []
     },
@@ -95,12 +95,12 @@
     "/ba-armory/assets/icons/icon-72x72.png": "80180bc90b52c58bae0f9f22c665e3c9c49a05c2",
     "/ba-armory/assets/icons/icon-96x96.png": "196fe49ddc2a5dad1c684c9e0a3b61712e50ecdf",
     "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
-    "/ba-armory/index.html": "4ca13f71363989f9489d9df655578bb5ac91cb63",
-    "/ba-armory/main.a50c199409f6dcfb.js": "64433b51cf434d4df39cd5752a50f9d3087e7545",
+    "/ba-armory/index.html": "e682b9b446fa4a9369a33f2bc166b9fa8a394e80",
+    "/ba-armory/main.76df1d6fd9c6ffe7.js": "b7f0e871f38b26040f0c4d0d663293a2ea04be68",
     "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
     "/ba-armory/polyfills.f0f271ab337134cb.js": "a2a76368894fc74a092fe880214a1eab643b3623",
     "/ba-armory/runtime.845d4e9c25cc8fc8.js": "59096c477675073435ddf0c3d19a44d432cad502",
-    "/ba-armory/styles.49f817fd341c484b.css": "f016dfc3f6488c6de46e5e8cf92e328797234637"
+    "/ba-armory/styles.9b0f726174c3036d.css": "878d4a2b9402d0bda03a5e8b1b397e146ba18bc6"
   },
   "navigationUrls": [
     {
