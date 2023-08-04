@@ -1,15 +1,15 @@
-import { Exclude, Expose, Type } from "class-transformer";
-import { Change, ChangeDispatcher, dispatchChanges, Dispatcher } from "prop-change-decorators";
-import { debounceTime, filter, Subject, Subscription } from "rxjs";
+import { Exclude, Expose, Type } from 'class-transformer';
+import { Change, ChangeDispatcher, dispatchChanges, Dispatcher } from 'prop-change-decorators';
+import { debounceTime, filter, Subject, Subscription } from 'rxjs';
 
-import { ACTION_POINT_ID } from "./deck";
-import { DeckStocks, DeckStocksClear, wrapStocks } from "./deck-stocks";
-import { DeckStudent } from "./deck-student";
-import { CampaignDifficulty, StuffCategory, Terrain } from "./enum";
-import { ElephSortOption, ItemSortOption, SortOption, StudentSortOption } from "./types";
+import { ACTION_POINT_ID } from './deck';
+import { DeckStocks, DeckStocksClear, wrapStocks } from './deck-stocks';
+import { DeckStudent } from './deck-student';
+import { CampaignDifficulty, StuffCategory, Terrain } from './enum';
+import { ElephSortOption, ItemSortOption, SortOption, StudentSortOption } from './types';
 
-import type { DataService } from "../services/data.service";
-import { RewardService } from "../services/reward.service";
+import type { DataService } from '../services/data.service';
+import { RewardService } from '../services/reward.service';
 
 @Exclude()
 export class DeckSquad {
@@ -102,7 +102,7 @@ export class DeckSquad {
 		});
 
 		dataService.deck.options.change$.subscribe((changes) => {
-			if (changes.showCampaignHard || changes.showOnlyCampaignHard) {
+			if (changes.showCampaignHard || changes.showOnlyCampaignHard || changes.normalCampaignDropRate || changes.hardCampaignDropRate) {
 				this.requiredStaled$.next();
 			}
 		});
@@ -176,17 +176,16 @@ export class DeckSquad {
 				let weight = 0;
 				const cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 				if (cost > 0) {
-					const rewards = rewardService.createRewardForCampaign(campaign)
+					const rewards = rewardService.createRewardForCampaign(campaign);
 					for (let [rewardId, rate] of rewards) {
 						const required = this.required[rewardId];
 						if (required > 0) {
-							let scale = 1;
+							let scale = dataService.deck.options.normalCampaignDropRate;
 							if (campaign.difficulty === CampaignDifficulty.Hard) {
+								scale = dataService.deck.options.hardCampaignDropRate;
 								const reward = dataService.getStuff(rewardId);
 								if (reward == null) {
 									scale = 0;
-								} else if (reward.category !== StuffCategory.SecretStone) {
-									scale = 0.5;
 								}
 							}
 							weight += Math.max(0, required - dataService.deck.stocks[rewardId]) * rate * scale;
@@ -204,13 +203,19 @@ export class DeckSquad {
 			.slice(0, 20)
 			.map(({ campaign }) => {
 				let amount = 0;
-				const rewards = rewardService.createRewardForCampaign(campaign)
+				const rewards = rewardService.createRewardForCampaign(campaign);
 				for (let [rewardId, rate] of rewards) {
 					const required = this.required[rewardId];
 					if (required > 0) amount = Math.max(amount, Math.max(0, required - dataService.deck.stocks[rewardId]) / rate);
 				}
+				let scale;
+				if (campaign.difficulty === CampaignDifficulty.Hard) {
+					scale = dataService.deck.options.hardCampaignDropRate;
+				} else {
+					scale = dataService.deck.options.normalCampaignDropRate;
+				}
 
-				return { id: campaign.id, amount: Math.ceil(amount) };
+				return { id: campaign.id, amount: Math.ceil(amount / scale) };
 			});
 
 		this.stages.splice(0, this.stages.length, ...candidates);

@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { ChangeDispatcher, Dispatcher, WatchBoolean } from 'prop-change-decorators';
+import { ChangeDispatcher, Dispatcher, WatchBoolean, WatchNumber } from 'prop-change-decorators';
 
 @Exclude()
 export class DeckOptions {
@@ -32,6 +32,16 @@ export class DeckOptions {
 	@WatchBoolean({ name: 'showOnlyCampaignHard' })
 	private __showOnlyCampaignHard__: boolean = false;
 	showOnlyCampaignHard: boolean;
+
+	@Expose({ name: 'normalCampaignDropRate' })
+	@WatchNumber({ name: 'normalCampaignDropRate' })
+	private __normalCampaignDropRate__: number = 1;
+	normalCampaignDropRate: number;
+
+	@Expose({ name: 'hardCampaignDropRate' })
+	@WatchNumber({ name: 'hardCampaignDropRate' })
+	private __hardCampaignDropRate__: number = 1;
+	hardCampaignDropRate: number;
 
 	@Dispatcher()
 	readonly change$: ChangeDispatcher<DeckOptions>;

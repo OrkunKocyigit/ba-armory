@@ -11,11 +11,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { ComponentsModule } from '../../components/components.module';
-import { ArmoryComponent } from '../armory/armory.component';
+import { ArmoryComponent } from './armory.component';
 import { TabCampaignsComponent } from './tab-campaigns/tab-campaigns.component';
 import { TabElephsComponent } from './tab-elephs/tab-elephs.component';
 import { TabGearsComponent } from './tab-gears/tab-gears.component';
 import { TabItemsComponent } from './tab-items/tab-items.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
 	declarations: [ArmoryComponent, TabCampaignsComponent, TabElephsComponent, TabGearsComponent, TabItemsComponent],
@@ -32,6 +34,8 @@ import { TabItemsComponent } from './tab-items/tab-items.component';
 		MatTabsModule,
 
 		ComponentsModule,
+		MatInputModule,
+		MatSelectModule,
 	],
 })
 export class ArmoryModule {}
