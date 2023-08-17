@@ -148,7 +148,7 @@ export class Deck {
 
 	updateStudent(model: DeckStudent) {
 		for (const [id, amount] of model.requiredItems) {
-			this.stocks[id] -= amount;
+			this.stocks[id] = Math.max(0, this.stocks[id] - amount);
 		}
 		this.stocksChanged.next(this.stocks);
 		model.star = model.starTarget;
