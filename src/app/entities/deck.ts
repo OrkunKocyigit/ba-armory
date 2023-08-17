@@ -7,7 +7,8 @@ import { DeckStocks, transformStocks, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
 
 import type { DataService } from '../services/data.service';
-import { RewardService } from "../services/reward.service";
+import { RewardService } from '../services/reward.service';
+import { Subject } from 'rxjs';
 
 export const GACHA_END_OFFSET = 5000000;
 export const GACHA_OFFSET = 4000000;
@@ -34,12 +35,25 @@ export class Deck {
 	@Transform(transformStocks, { toClassOnly: true })
 	stocks: DeckStocks;
 
+	stocksChanged: Subject<DeckStocks> = new Subject<DeckStocks>();
+
 	@Expose({ name: 'squads' })
 	@Type(() => DeckSquad)
 	squads: DeckSquad[] = [];
 
 	@Expose({ name: 'selectedSquadId' })
 	private __selectedSquadId__: number = undefined;
+
+	constructor() {
+		this.stocksChanged.subscribe((value) => {
+			this.stocks = value;
+		});
+	}
+
+	updateStock(id: number, amount: number) {
+		this.stocks[id] = amount;
+		this.stocksChanged.next(this.stocks);
+	}
 
 	get selectedSquadId() {
 		return this.__selectedSquadId__;
@@ -130,5 +144,21 @@ export class Deck {
 			this.squads[selectedSquadId].id = selectedSquadId;
 			this.selectedSquadId = newSquadId;
 		}
+	}
+
+	updateStudent(model: DeckStudent) {
+		for (const [id, amount] of model.requiredItems) {
+			this.stocks[id] -= amount;
+		}
+		this.stocksChanged.next(this.stocks);
+		model.star = model.starTarget;
+		model.weapon = model.weaponTarget;
+		for (const skill of model.skills) {
+			skill.level = skill.levelTarget;
+		}
+		for (const equipment of model.equipments) {
+			equipment.tier = equipment.tierTarget;
+		}
+		model.gear = model.gearTarget;
 	}
 }

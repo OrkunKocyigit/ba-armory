@@ -9,7 +9,7 @@ import { DataService } from '../../services/data.service';
 	selector: 'ba-gear-card',
 	templateUrl: './gear-card.component.html',
 	styleUrls: ['./gear-card.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class GearCardComponent implements OnInit, OnDestroy {
 	@Input()

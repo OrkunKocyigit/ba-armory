@@ -74,6 +74,7 @@
 				<ng-template #isTargetWeapon>
 					<bar-rating
 						class="is_target-show"
+						[attr.disabled]="model.starTarget === 5 ? null : 'disabled'"
 						[class.is_target-reached]="model.weapon === model.weaponTarget"
 						[(rate)]="model.weaponTarget"
 						[max]="3"
@@ -97,7 +98,7 @@
 		</div>
 	</mat-card-content>
 	<mat-card-actions>
-		<!-- TODO: i18n -->
+			<!-- TODO: i18n -->
 		<button class="action-remove" mat-button color="warn" tabindex="-1" size="small" (click)="handleClickDelete()">
 			<mat-icon>block</mat-icon> {{ action_remove }}
 		</button>
@@ -115,6 +116,16 @@
 			(click)="handleClickTarget()"
 		>
 			<mat-icon>gps_fixed</mat-icon> {{ action_target }}
+		</button>
+		<button
+			class="action-update"
+			mat-button
+			tabindex="-1"
+			size="small"
+			[disabled]="!isUpdatable"
+			(click)="handleClickUpdate()"
+		>
+			<mat-icon>merge_type</mat-icon> {{ action_update }}
 		</button>
 	</mat-card-actions>
 	<mat-card-footer></mat-card-footer>

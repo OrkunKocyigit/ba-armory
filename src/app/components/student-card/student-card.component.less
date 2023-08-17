@@ -1,7 +1,7 @@
 :host {
 	display: block;
 	width: 240px;
-	height: 289px;
+	height: 329px;
 
 	&.is_target {
 		::ng-deep .is_target-show {
@@ -230,6 +230,7 @@ ba-skill-card[skill_type="gearnormal"] {
 .mat-card-actions {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	margin-left: 0;
 	margin-right: 0;
 	padding: var(--spacing-x-small);
@@ -238,7 +239,8 @@ ba-skill-card[skill_type="gearnormal"] {
 		margin: 0;
 	}
 
-	.action-upgrade {
-		margin-left: auto;
+	> * {
+		flex: 50%;
+		width: 100%;
 	}
 }
