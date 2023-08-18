@@ -25,5 +25,5 @@
 	</mat-form-field>
 </div>
 <div class="list">
-	<ba-campaign-card *ngFor="let stage of dataService.deck.selectedSquad.stages" [id]="stage.id" [amount]="stage.amount"></ba-campaign-card>
+	<ba-campaign-card *ngFor="let stage of dataService.deck.selectedSquad.stages" [id]="stage.id" [amount]="stage.amount" [showModal]="true" (campaignModalSelected)="showCampaignModal(stage.id, stage.amount)"></ba-campaign-card>
 </div>

@@ -1,11 +1,11 @@
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { ACTION_POINT_ID } from "../../entities/deck";
-import { CampaignDifficulty, Reward } from "../../entities/enum";
-import { DataService } from "../../services/data.service";
-import { RewardService } from "../../services/reward.service";
+import { ACTION_POINT_ID } from '../../entities/deck';
+import { CampaignDifficulty, Reward } from '../../entities/enum';
+import { DataService } from '../../services/data.service';
+import { RewardService } from '../../services/reward.service';
 
 @Component({
 	selector: 'ba-campaign-card',
@@ -19,6 +19,12 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 
 	@Input()
 	amount: number;
+
+	@Input()
+	showModal: boolean = false;
+
+	@Output()
+	campaignModalSelected = new EventEmitter<number>();
 
 	campaign_amount: string = '';
 	campaign_cost: string = '';
@@ -34,7 +40,11 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 	private changeSubscription: Subscription;
 	private requiredUpdatedSubscription: Subscription;
 
-	constructor(private readonly dataService: DataService, private readonly changeDetectorRef: ChangeDetectorRef, private readonly rewardService: RewardService) {}
+	constructor(
+		private readonly dataService: DataService,
+		private readonly changeDetectorRef: ChangeDetectorRef,
+		private readonly rewardService: RewardService
+	) {}
 
 	ngOnInit(): void {
 		const campaign = this.dataService.stages.campaign.find((campaign) => campaign.id === this.id);
@@ -49,7 +59,7 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 		this.stage = campaign.stage;
 		this.name = campaign.name;
 		this.iconUrl = campaign.iconUrl;
-		this.rewards = this.rewardService.createRewardForCampaign(campaign)
+		this.rewards = this.rewardService.createRewardForCampaign(campaign);
 		this.cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
@@ -71,5 +81,9 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 			this.changeDetectorRef.markForCheck();
 		});
 		this.changeDetectorRef.markForCheck();
+	}
+
+	modalButtonClicked(id: number) {
+		this.campaignModalSelected.emit(id);
 	}
 }

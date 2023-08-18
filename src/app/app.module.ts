@@ -20,7 +20,8 @@ import { IconSelectorModule } from './pages/icon-selector/icon-selector.module';
 import { SelectorModule } from './pages/selector/selector.module';
 import { SettingModule } from './pages/setting/setting.module';
 import { PreloadService } from './services/preload.service';
-import { APP_BASE_HREF } from "@angular/common";
+import { APP_BASE_HREF } from '@angular/common';
+import { CampaignDialogModule } from './pages/campaign-dialog/campaign-dialog.module';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -35,6 +36,7 @@ import { APP_BASE_HREF } from "@angular/common";
 		SelectorModule,
 		IconSelectorModule,
 		SettingModule,
+		CampaignDialogModule,
 
 		MatButtonModule,
 		MatDialogModule,
@@ -53,7 +55,7 @@ import { APP_BASE_HREF } from "@angular/common";
 	providers: [
 		{
 			provide: APP_BASE_HREF,
-			useValue: "/ba-armory/"
+			useValue: '/ba-armory/',
 		},
 		PreloadService,
 		{

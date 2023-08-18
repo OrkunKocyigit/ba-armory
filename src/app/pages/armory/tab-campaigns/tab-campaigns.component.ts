@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { DataService } from '../../../services/data.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CampaignDialogComponent } from '../../campaign-dialog/campaign-dialog.component';
 
 @Component({
 	selector: 'ba-tab-campaigns',
@@ -14,7 +16,11 @@ export class TabCampaignsComponent implements OnInit, OnDestroy {
 	private changeSubscription: Subscription;
 	private requiredUpdatedSubscription: Subscription;
 
-	constructor(public readonly dataService: DataService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+	constructor(
+		public readonly dataService: DataService,
+		private readonly changeDetectorRef: ChangeDetectorRef,
+		private readonly dialog: MatDialog
+	) {}
 
 	ngOnInit(): void {
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
@@ -36,5 +42,14 @@ export class TabCampaignsComponent implements OnInit, OnDestroy {
 			this.changeDetectorRef.markForCheck();
 		});
 		this.changeDetectorRef.markForCheck();
+	}
+
+	async showCampaignModal(id: number, amount: number) {
+		const dialogRef = this.dialog.open(CampaignDialogComponent, {
+			data: { id: id, amount: amount },
+			autoFocus: false,
+			restoreFocus: false,
+		});
+		dialogRef.afterClosed();
 	}
 }
