@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1692335715679,
+  "timestamp": 1692595490500,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/ba-armory/favicon.ico",
         "/ba-armory/index.html",
-        "/ba-armory/main.aab92d929ac726c4.js",
+        "/ba-armory/main.dc65a7014bb1de5e.js",
         "/ba-armory/manifest.webmanifest",
         "/ba-armory/polyfills.f0f271ab337134cb.js",
         "/ba-armory/runtime.845d4e9c25cc8fc8.js",
@@ -57,7 +57,7 @@
       },
       "urls": [],
       "patterns": [
-        "https:\\/\\/fastly\\.jsdelivr\\.net\\/gh\\/lonqie\\/SchaleDB\\/images\\/.*"
+        "https:\\/\\/schale\\.gg\\/images\\/.*"
       ]
     }
   ],
@@ -65,7 +65,7 @@
     {
       "name": "remote-data",
       "patterns": [
-        "https:\\/\\/fastly\\.jsdelivr\\.net\\/gh\\/lonqie\\/SchaleDB\\/data\\/.*"
+        "https:\\/\\/schale\\.gg\\/data\\/.*"
       ],
       "strategy": "performance",
       "maxSize": 10,
@@ -95,8 +95,8 @@
     "/ba-armory/assets/icons/icon-72x72.png": "80180bc90b52c58bae0f9f22c665e3c9c49a05c2",
     "/ba-armory/assets/icons/icon-96x96.png": "196fe49ddc2a5dad1c684c9e0a3b61712e50ecdf",
     "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
-    "/ba-armory/index.html": "35cef0a0e56ce7a3f458fc8efb5bf7683ec1ef1a",
-    "/ba-armory/main.aab92d929ac726c4.js": "1915086e85db530ae019eda018578219fd9a6762",
+    "/ba-armory/index.html": "f3daf402372895aed60e1a957fc2036713016eba",
+    "/ba-armory/main.dc65a7014bb1de5e.js": "972d83b142a4e5535fc0c17e26840904cc335dd6",
     "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
     "/ba-armory/polyfills.f0f271ab337134cb.js": "a2a76368894fc74a092fe880214a1eab643b3623",
     "/ba-armory/runtime.845d4e9c25cc8fc8.js": "59096c477675073435ddf0c3d19a44d432cad502",
