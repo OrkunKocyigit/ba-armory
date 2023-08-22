@@ -145,7 +145,9 @@ export class DataService {
 			plainToInstance(Equipment, json, {
 				excludeExtraneousValues: true,
 				exposeDefaultValues: true,
-			}).map((item) => [item.id, item])
+			})
+				.filter((item) => item.isReleased[this.region])
+				.map((item) => [item.id, item])
 		);
 
 		for (const [_, item] of this.items) {
