@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1692728679400,
+  "timestamp": 1692729319972,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -78,10 +78,10 @@
     }
   ],
   "hashTable": {
-    "/ba-armory/assets/i18n/cn.json": "a7b7421d2eb9e9326c605e8c0006fa0259457f5e",
-    "/ba-armory/assets/i18n/en.json": "43c489cfdf3029eb5be43a3d7be8119b09159249",
-    "/ba-armory/assets/i18n/jp.json": "4dcecba82886259974ec938f551e3d5e84550a3d",
-    "/ba-armory/assets/i18n/tw.json": "0eb09a8dc3dd55617939aca84571ab38e69f3d1a",
+    "/ba-armory/assets/i18n/cn.json": "962659970372681a3a280fc98817bffa7cb3518d",
+    "/ba-armory/assets/i18n/en.json": "69c273cf23591136a07846497976d58ff2a2e7c6",
+    "/ba-armory/assets/i18n/jp.json": "d6fac84d291f66bb7c9a3c03aaa8f052542bea16",
+    "/ba-armory/assets/i18n/tw.json": "3b22db19a9f203e595fa80b60875d8a684dab73b",
     "/ba-armory/assets/icons/apple-touch-icon.png": "8b3f8b6aef67077045a33320adc3e673791cadc5",
     "/ba-armory/assets/icons/icon-128x128.png": "d5ec7d53548efa2156ac1fddf7eb6a7211ad881b",
     "/ba-armory/assets/icons/icon-144x144.png": "bbb2e301523b4010239b2e1020126b57b68d0032",
@@ -97,7 +97,7 @@
     "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
     "/ba-armory/index.html": "415296514c345b3da965aab25a28f83af5b228d6",
     "/ba-armory/main.bf324ee220473b1e.js": "2475b4532434ce8f7f482652798776c3eb04b33c",
-    "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
+    "/ba-armory/manifest.webmanifest": "70b1340dbcbff67c26aeeaf7494df1ad5b08c1bc",
     "/ba-armory/polyfills.f0f271ab337134cb.js": "a2a76368894fc74a092fe880214a1eab643b3623",
     "/ba-armory/runtime.845d4e9c25cc8fc8.js": "59096c477675073435ddf0c3d19a44d432cad502",
     "/ba-armory/styles.b1a686537f3069cc.css": "2ba17c4b25a63b926bf1285bf84c895cbc87fe7d"
