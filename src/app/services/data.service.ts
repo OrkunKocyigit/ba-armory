@@ -1,17 +1,17 @@
-import { plainToClassFromExist, plainToInstance } from "class-transformer";
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 
-import { Injectable } from "@angular/core";
-import { Common } from "../entities/common";
-import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from "../entities/deck";
-import { ArmorType, BulletType, EquipmentCategory, ItemCategory, SkillType, StuffCategory, Terrain } from "../entities/enum";
-import { Equipment } from "../entities/equipment";
-import { I18N } from "../entities/i18n";
-import { EXTRA_ICONS, RAID_ICONS } from "../entities/icons";
-import { Localization } from "../entities/localization";
-import { Stage } from "../entities/stage";
-import { Student } from "../entities/student";
-import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption, TerrainOption } from "../entities/types";
-import { RewardService } from "./reward.service";
+import { Injectable } from '@angular/core';
+import { Common } from '../entities/common';
+import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
+import { ArmorType, BulletType, EquipmentCategory, ItemCategory, SkillType, StuffCategory, Terrain } from '../entities/enum';
+import { Equipment } from '../entities/equipment';
+import { I18N } from '../entities/i18n';
+import { EXTRA_ICONS, RAID_ICONS } from '../entities/icons';
+import { Localization } from '../entities/localization';
+import { Stage } from '../entities/stage';
+import { Student } from '../entities/student';
+import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption, TerrainOption } from '../entities/types';
+import { RewardService } from './reward.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -81,20 +81,23 @@ export class DataService {
 	}
 
 	setStudents(json: any[]) {
+		const region = this.region;
 		this.students = new Map(
 			plainToInstance(Student, json, {
 				excludeExtraneousValues: true,
 				exposeDefaultValues: true,
-			}).map((student) => {
-				student.skills = student.skills.filter(
-					(skill) =>
-						skill.skillType === SkillType.Ex ||
-						skill.skillType === SkillType.Normal ||
-						skill.skillType === SkillType.Passive ||
-						skill.skillType === SkillType.Sub
-				);
-				return [student.id, student];
 			})
+				.filter((student) => student.isReleased[region])
+				.map((student) => {
+					student.skills = student.skills.filter(
+						(skill) =>
+							skill.skillType === SkillType.Ex ||
+							skill.skillType === SkillType.Normal ||
+							skill.skillType === SkillType.Passive ||
+							skill.skillType === SkillType.Sub
+					);
+					return [student.id, student];
+				})
 		);
 	}
 

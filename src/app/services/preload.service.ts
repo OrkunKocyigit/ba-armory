@@ -1,12 +1,12 @@
 import { instanceToPlain } from 'class-transformer';
 import { compressToBase64, compressToUTF16, decompressFromBase64, decompressFromUTF16 } from 'lz-string';
 
-import { Inject, Injectable } from "@angular/core";
+import { Inject, Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
 import { DataService } from './data.service';
-import { APP_BASE_HREF } from "@angular/common";
-import { RewardService } from "./reward.service";
+import { APP_BASE_HREF } from '@angular/common';
+import { RewardService } from './reward.service';
 
 const STORAGE_LANGUAGE_KEY = 'language';
 const STORAGE_REGION_KEY = 'region';
@@ -145,6 +145,7 @@ export class PreloadService {
 
 			const json = decompressFromUTF16(compressed) ?? '{}';
 			const plain = JSON.parse(json);
+			plain.students = plain.students.filter((student: { id: number }) => this.dataService.students.has(student.id));
 			return this.dataService.setDeck(plain, this.rewardService);
 		} catch (_: unknown) {}
 
