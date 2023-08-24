@@ -1,6 +1,6 @@
 {
 	"name": "ba-armory",
-	"version": "1.3.4",
+	"version": "1.3.5",
 	"type": "module",
 	"scripts": {
 		"format": "prettier --write ./src",
