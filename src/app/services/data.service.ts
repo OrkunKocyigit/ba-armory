@@ -3,7 +3,7 @@ import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Injectable } from '@angular/core';
 import { Common } from '../entities/common';
 import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
-import { ArmorType, BulletType, EquipmentCategory, ItemCategory, SkillType, StuffCategory, Terrain } from '../entities/enum';
+import { ArmorType, BulletType, EquipmentCategory, ItemCategory, Reward, SkillType, StuffCategory, Terrain } from '../entities/enum';
 import { Equipment } from '../entities/equipment';
 import { I18N } from '../entities/i18n';
 import { EXTRA_ICONS, RAID_ICONS } from '../entities/icons';
@@ -170,6 +170,33 @@ export class DataService {
 			excludeExtraneousValues: true,
 			exposeDefaultValues: true,
 		});
+
+		function mergeSameIds(reward: Reward[]) {
+			const ids = reward.map((value) => value[0]).filter((value, index, array) => index == array.indexOf(value));
+			const merged = [];
+			for (const id of ids) {
+				const newReward: Reward = [
+					id,
+					reward
+						.filter((value) => value[0] === id)
+						.map((value) => value[1])
+						.reduce((previousValue, currentValue) => previousValue + currentValue, 0),
+				];
+				merged.push(newReward);
+			}
+			return merged;
+		}
+
+		for (const campaign of this.stages.campaign) {
+			campaign.rewards.default = mergeSameIds(campaign.rewards.default);
+			campaign.rewards.firstClear = mergeSameIds(campaign.rewards.firstClear);
+			campaign.rewards.threeStar = mergeSameIds(campaign.rewards.threeStar);
+			if (campaign.rewardsGlobal) {
+				campaign.rewardsGlobal.default = mergeSameIds(campaign.rewardsGlobal.default);
+				campaign.rewardsGlobal.firstClear = mergeSameIds(campaign.rewardsGlobal.firstClear);
+				campaign.rewardsGlobal.threeStar = mergeSameIds(campaign.rewardsGlobal.threeStar);
+			}
+		}
 		this.stages.hydrate(this);
 	}
 
