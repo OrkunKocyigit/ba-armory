@@ -197,6 +197,11 @@ export class DataService {
 				campaign.rewardsGlobal.firstClear = mergeSameIds(campaign.rewardsGlobal.firstClear);
 				campaign.rewardsGlobal.threeStar = mergeSameIds(campaign.rewardsGlobal.threeStar);
 			}
+			if (campaign.RewardsCn) {
+				campaign.RewardsCn.default = mergeSameIds(campaign.RewardsCn.default);
+				campaign.RewardsCn.firstClear = mergeSameIds(campaign.RewardsCn.firstClear);
+				campaign.RewardsCn.threeStar = mergeSameIds(campaign.RewardsCn.threeStar);
+			}
 		}
 		this.stages.hydrate(this);
 	}

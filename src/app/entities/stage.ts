@@ -1,23 +1,23 @@
-import { Exclude, Expose, Type } from "class-transformer";
-import { CampaignDifficulty, EntryCost, Reward, SchoolDungeonType, Terrain, WeekDungeonType } from "./enum";
-import { environment } from "../../environments/environment";
+import { Exclude, Expose, Type } from 'class-transformer';
+import { CampaignDifficulty, EntryCost, Reward, SchoolDungeonType, Terrain, WeekDungeonType } from './enum';
+import { environment } from '../../environments/environment';
 
-import type { DataService } from "../services/data.service";
+import type { DataService } from '../services/data.service';
 
 export class Stage {
-	@Expose({ name: "Campaign" })
+	@Expose({ name: 'Campaign' })
 	@Type(() => Campaign)
 	campaign: Campaign[];
 
-	@Expose({ name: "WeekDungeon" })
+	@Expose({ name: 'WeekDungeon' })
 	@Type(() => WeekDungeon)
 	weekDungeon: WeekDungeon[];
 
-	@Expose({ name: "SchoolDungeon" })
+	@Expose({ name: 'SchoolDungeon' })
 	@Type(() => SchoolDungeon)
 	schoolDungeon: SchoolDungeon[];
 
-	@Expose({ name: "Conquest" })
+	@Expose({ name: 'Conquest' })
 	@Type(() => Conquest)
 	conquest: Conquest[];
 
@@ -27,7 +27,7 @@ export class Stage {
 		if (this.schoolDungeon == null) this.schoolDungeon = [];
 		if (this.conquest == null) this.conquest = [];
 
-		const languageName: "nameEn" | "nameJp" | "nameKr" | "nameTh" | "nameTw" | "nameCn" = ("name" +
+		const languageName: 'nameEn' | 'nameJp' | 'nameKr' | 'nameTh' | 'nameTw' | 'nameCn' = ('name' +
 			dataService.language.substring(0, 1).toUpperCase() +
 			dataService.language.substring(1)) as any;
 
@@ -35,10 +35,10 @@ export class Stage {
 			campaign.name = campaign[languageName] ?? campaign.nameJp;
 		}
 		for (const campaign of this.weekDungeon) {
-			campaign.name = "";
+			campaign.name = '';
 		}
 		for (const campaign of this.schoolDungeon) {
-			campaign.name = "";
+			campaign.name = '';
 		}
 		for (const campaign of this.conquest) {
 			campaign.name = campaign[languageName] ?? campaign.nameJp;
@@ -47,65 +47,76 @@ export class Stage {
 }
 
 export class Rewards {
-	@Expose({ name: "Default" })
+	@Expose({ name: 'Default' })
 	@Type(() => Array)
 	default: Reward[];
-	@Expose({ name: "FirstClear" })
+	@Expose({ name: 'FirstClear' })
 	@Type(() => Array)
 	firstClear: Reward[];
-	@Expose({ name: "ThreeStar" })
+	@Expose({ name: 'ThreeStar' })
 	@Type(() => Array)
 	threeStar: Reward[];
 }
 
 export class Campaign {
-	@Expose({ name: "Id" })
+	@Expose({ name: 'Id' })
 	id: number;
-	@Expose({ name: "Difficulty" })
+	@Expose({ name: 'Difficulty' })
 	difficulty: CampaignDifficulty;
-	@Expose({ name: "Area" })
+	@Expose({ name: 'Area' })
 	area: number;
-	@Expose({ name: "Stage" })
+	@Expose({ name: 'Stage' })
 	stage: number;
 	@Exclude()
 	name: string;
-	@Expose({ name: "NameEn" })
+	@Expose({ name: 'NameEn' })
 	nameEn?: string;
-	@Expose({ name: "NameJp" })
+	@Expose({ name: 'NameJp' })
 	nameJp: string;
-	@Expose({ name: "NameKr" })
+	@Expose({ name: 'NameKr' })
 	nameKr?: string;
-	@Expose({ name: "NameTh" })
+	@Expose({ name: 'NameTh' })
 	nameTh?: string;
-	@Expose({ name: "NameTw" })
+	@Expose({ name: 'NameTw' })
 	nameTw?: string;
-	@Expose({ name: "NameCn" })
+	@Expose({ name: 'NameCn' })
 	nameCn?: string;
-	@Expose({ name: "EntryCost" })
+	@Expose({ name: 'EntryCost' })
 	@Type(() => Array)
 	entryCost: EntryCost[];
-	@Expose({ name: "Terrain" })
+	@Expose({ name: 'Terrain' })
 	terrain: Terrain;
-	@Expose({ name: "Level" })
+	@Expose({ name: 'Level' })
 	level: number;
-	@Expose({ name: "Rewards" })
+	@Expose({ name: 'Rewards' })
 	@Type(() => Rewards)
 	rewards: Rewards;
-	@Expose({ name: "RewardsGlobal" })
+	@Expose({ name: 'RewardsGlobal' })
 	@Type(() => Rewards)
 	rewardsGlobal?: Rewards;
+	@Expose({ name: 'RewardsCn' })
+	@Type(() => Rewards)
+	RewardsCn?: Rewards;
 
 	get iconUrl() {
-		return `${environment.CDN_BASE}/images/campaign/Campaign_Image_${this.area.toString().padStart(2, "0")}_${
-			this.difficulty == CampaignDifficulty.Hard ? "Hard" : "Normal"
+		return `${environment.CDN_BASE}/images/campaign/Campaign_Image_${this.area.toString().padStart(2, '0')}_${
+			this.difficulty == CampaignDifficulty.Hard ? 'Hard' : 'Normal'
 		}.png`;
 	}
 
 	regionalRewards(dataService: DataService) {
 		const region = dataService.region;
 		let campaignRewards: Rewards;
-		if (region === dataService.regionOptions.find(regionOption => regionOption.label === "Global")?.id && this.rewardsGlobal !== undefined) {
+		if (
+			region === dataService.regionOptions.find((regionOption) => regionOption.label === 'Global')?.id &&
+			this.rewardsGlobal !== undefined
+		) {
 			campaignRewards = this.rewardsGlobal;
+		} else if (
+			region === dataService.regionOptions.find((regionOption) => regionOption.label === 'China')?.id &&
+			this.RewardsCn !== undefined
+		) {
+			campaignRewards = this.RewardsCn;
 		} else {
 			campaignRewards = this.rewards;
 		}
@@ -114,76 +125,76 @@ export class Campaign {
 }
 
 export class Conquest {
-	@Expose({ name: "Id" })
+	@Expose({ name: 'Id' })
 	id: number;
 	@Exclude()
 	name: string;
-	@Expose({ name: "NameEn" })
+	@Expose({ name: 'NameEn' })
 	nameEn?: string;
-	@Expose({ name: "NameJp" })
+	@Expose({ name: 'NameJp' })
 	nameJp: string;
-	@Expose({ name: "NameKr" })
+	@Expose({ name: 'NameKr' })
 	nameKr?: string;
-	@Expose({ name: "NameTh" })
+	@Expose({ name: 'NameTh' })
 	nameTh?: string;
-	@Expose({ name: "NameTw" })
+	@Expose({ name: 'NameTw' })
 	nameTw?: string;
-	@Expose({ name: "NameCn" })
+	@Expose({ name: 'NameCn' })
 	nameCn?: string;
-	@Expose({ name: "EventId" })
+	@Expose({ name: 'EventId' })
 	eventId: number;
-	@Expose({ name: "Level" })
+	@Expose({ name: 'Level' })
 	level: number;
-	@Expose({ name: "Terrain" })
+	@Expose({ name: 'Terrain' })
 	terrain: Terrain;
-	@Expose({ name: "EntryCost" })
+	@Expose({ name: 'EntryCost' })
 	@Type(() => Array)
 	entryCost: EntryCost[];
-	@Expose({ name: "Rewards" })
+	@Expose({ name: 'Rewards' })
 	@Type(() => Rewards)
 	rewards: Rewards;
 }
 
 export class SchoolDungeon {
-	@Expose({ name: "Id" })
+	@Expose({ name: 'Id' })
 	id: number;
-	@Expose({ name: "Type" })
+	@Expose({ name: 'Type' })
 	type: SchoolDungeonType;
-	@Expose({ name: "Stage" })
+	@Expose({ name: 'Stage' })
 	stage: number;
 	@Exclude()
 	name: string;
-	@Expose({ name: "EntryCost" })
+	@Expose({ name: 'EntryCost' })
 	entryCost: EntryCost[];
-	@Expose({ name: "Terrain" })
+	@Expose({ name: 'Terrain' })
 	terrain: Terrain;
-	@Expose({ name: "Level" })
+	@Expose({ name: 'Level' })
 	level: number;
-	@Expose({ name: "Rewards" })
+	@Expose({ name: 'Rewards' })
 	@Type(() => Rewards)
 	rewards: Rewards;
 }
 
 export class WeekDungeon {
-	@Expose({ name: "Id" })
+	@Expose({ name: 'Id' })
 	id: number;
-	@Expose({ name: "Type" })
+	@Expose({ name: 'Type' })
 	type: WeekDungeonType;
-	@Expose({ name: "Stage" })
+	@Expose({ name: 'Stage' })
 	stage: number;
 	@Exclude()
 	name: string;
-	@Expose({ name: "EntryCost" })
+	@Expose({ name: 'EntryCost' })
 	@Type(() => Array)
 	entryCost: EntryCost[];
-	@Expose({ name: "Terrain" })
+	@Expose({ name: 'Terrain' })
 	terrain: Terrain;
-	@Expose({ name: "Level" })
+	@Expose({ name: 'Level' })
 	level: number;
-	@Expose({ name: "Rewards" })
+	@Expose({ name: 'Rewards' })
 	@Type(() => Rewards)
 	rewards: Rewards;
-	@Expose({ name: "RewardsGlobal" })
+	@Expose({ name: 'RewardsGlobal' })
 	@Type(() => Rewards)
 	rewardsGlobal?: Rewards;
 }
