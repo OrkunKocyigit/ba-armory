@@ -120,7 +120,8 @@ export class DeckStudent {
 
 		(this as { levelMax: number }).levelMax = dataService.studentLevelMax;
 		(this as { starMin: number }).starMin = student.starGrade;
-		(this as { gearMax: number }).gearMax = student.gear?.tierUpMaterial?.length ? student.gear.tierUpMaterial.length + 1 : 0;
+		(this as { gearMax: number }).gearMax =
+			student.gear?.tierUpMaterial?.length && student.isGearReleased(dataService.region) ? student.gear.tierUpMaterial.length + 1 : 0;
 
 		this.level = this.level;
 		this.star = this.star;

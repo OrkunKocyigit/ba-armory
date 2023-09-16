@@ -45,7 +45,7 @@ export class GearCardComponent implements OnInit, OnDestroy {
 		const student = this.dataService.students.get(this.id);
 
 		this.name = student.name;
-		this.iconUrl = student.gearIconUrl;
+		this.iconUrl = student.gearIconUrl(this.dataService.region);
 
 		this.changeSubscription = this.model.change$.subscribe(() => {
 			this.changeDetectorRef.markForCheck();

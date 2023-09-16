@@ -230,10 +230,14 @@ export class Student {
 		return `${environment.CDN_BASE}/images/schoolicon/School_Icon_${this.school.toUpperCase()}_W.png`;
 	}
 
-	get gearIconUrl() {
-		if (this.gear.released == undefined) {
-			return `${environment.CDN_BASE}/images/gear/empty.png`;
+	isGearReleased(region: number = 0): boolean {
+		return this.gear != undefined && this.gear.released != undefined && this.gear.released[region] === true;
+	}
+
+	gearIconUrl(region: number = 0) {
+		if (this.isGearReleased(region)) {
+			return `${environment.CDN_BASE}/images/gear/icon/${this.id}.webp`;
 		}
-		return `${environment.CDN_BASE}/images/gear/icon/${this.id}.webp`;
+		return `${environment.CDN_BASE}/images/gear/empty.png`;
 	}
 }
