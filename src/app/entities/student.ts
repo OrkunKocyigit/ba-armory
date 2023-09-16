@@ -219,7 +219,7 @@ export class Student {
 	skillMaterialAmount: Array<number[]>;
 
 	get collectionTextureUrl() {
-		return `${environment.CDN_BASE}/images/student/icon/${this.id}.webp`;
+		return `${environment.CDN_BASE}/images/student/collection/${this.id}.webp`;
 	}
 
 	get collectionBGUrl() {

@@ -45,4 +45,5 @@ export interface I18N {
 	eleph_sort_total: string;
 	eleph_sort_deficit: string;
 	eleph_sort_required: string;
+	eleph_sort_stock: string;
 }
