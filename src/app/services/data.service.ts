@@ -53,6 +53,7 @@ export class DataService {
 	regionOptions: RegionOption[] = [
 		{ id: 0, label: 'Japan' },
 		{ id: 1, label: 'Global' },
+		{ id: 2, label: 'China' },
 	];
 	languageOptions: LanguageOption[] = [
 		{ id: 'cn', label: '简体中文', code: 'zh-Hans' },
