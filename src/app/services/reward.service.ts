@@ -15,7 +15,7 @@ export class RewardService {
 			return [];
 		}
 		const groupId = reward[0] - 4000000;
-		const group = this.dataService.common.GachaGroup.find((group) => group.Id === groupId);
+		const group = this.dataService.config.GachaGroups.find((group) => group.Id === groupId);
 		if (!group && !((group.Id >= 600000 && group.Id < 700000) || (group.Id >= 300000 && group.Id < 360000))) {
 			return [];
 		}

@@ -12,6 +12,7 @@ import { Stage } from '../entities/stage';
 import { Student } from '../entities/student';
 import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption, TerrainOption } from '../entities/types';
 import { RewardService } from './reward.service';
+import { Config } from '../entities/config';
 
 @Injectable({
 	providedIn: 'root',
@@ -31,6 +32,7 @@ export class DataService {
 
 	stages: Stage = new Stage();
 
+	config: Config;
 	common: Common;
 	localization: Localization;
 	i18n: I18N;
@@ -71,6 +73,10 @@ export class DataService {
 	link = '';
 
 	constructor() {}
+
+	setConfig(json: any) {
+		this.config = json;
+	}
 
 	setCommon(json: any) {
 		this.common = json;

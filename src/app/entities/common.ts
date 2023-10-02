@@ -1,16 +1,6 @@
 export interface Common {
-	GachaGroup: GachaGroup[];
 	regions: Region[];
 	changelog: Changelog[];
-}
-
-export interface GachaGroup {
-	Id: number;
-	ItemList: Array<number[]>;
-	Icon?: string;
-	NameEn?: string;
-	NameJp?: string;
-	Rarity?: string;
 }
 
 export interface Changelog {
