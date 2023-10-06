@@ -43,9 +43,10 @@
 			"urls": [
 				"https://schale.gg/data/**"
 			],
+			"version": 2,
 			"cacheConfig": {
 				"maxSize": 10,
-				"maxAge": "7d",
+				"maxAge": "1d",
 				"timeout": "5s",
 				"strategy": "performance"
 			}
