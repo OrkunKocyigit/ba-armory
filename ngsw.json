@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1696619994380,
+  "timestamp": 1696621532450,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -69,12 +69,12 @@
       ],
       "strategy": "performance",
       "maxSize": 10,
-      "maxAge": 604800000,
+      "maxAge": 86400000,
       "timeoutMs": 5000,
       "cacheQueryOptions": {
         "ignoreVary": true
       },
-      "version": 1
+      "version": 2
     }
   ],
   "hashTable": {
