@@ -1,7 +1,6 @@
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 
 import { Injectable } from '@angular/core';
-import { Common } from '../entities/common';
 import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
 import { ArmorType, BulletType, EquipmentCategory, ItemCategory, Reward, SkillType, StuffCategory, Terrain } from '../entities/enum';
 import { Equipment } from '../entities/equipment';
@@ -33,7 +32,6 @@ export class DataService {
 	stages: Stage = new Stage();
 
 	config: Config;
-	common: Common;
 	localization: Localization;
 	i18n: I18N;
 
@@ -76,15 +74,11 @@ export class DataService {
 
 	setConfig(json: any) {
 		this.config = json;
-	}
 
-	setCommon(json: any) {
-		this.common = json;
+		const region = this.config.Regions[this.region];
 
-		const region = this.common.regions[this.region];
-
-		this.studentLevelMax = region.studentlevel_max;
-		this.weaponLevelMax = region.weaponlevel_max;
+		this.studentLevelMax = region.StudentMaxLevel;
+		this.weaponLevelMax = region.WeaponMaxLevel;
 	}
 
 	setStudents(json: any[]) {

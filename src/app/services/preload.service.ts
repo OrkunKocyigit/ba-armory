@@ -31,7 +31,6 @@ export class PreloadService {
 
 		const language = this.dataService.language;
 		const configSource = `${environment.CDN_BASE}/data/config.min.json`;
-		const commonSource = `${environment.CDN_BASE}/data/common.min.json`;
 		const itemsSource = `${environment.CDN_BASE}/data/${language}/items.min.json`;
 		const equipmentsSource = `${environment.CDN_BASE}/data/${language}/equipment.min.json`;
 		const studentsSource = `${environment.CDN_BASE}/data/${language}/students.min.json`;
@@ -39,9 +38,8 @@ export class PreloadService {
 		const localizationSource = `${environment.CDN_BASE}/data/${language}/localization.min.json`;
 		const i18nSource = `./assets/i18n/${language}.json`;
 
-		const [config, common, items, equipments, students, stages, localization, i18n] = await Promise.all([
+		const [config, items, equipments, students, stages, localization, i18n] = await Promise.all([
 			this.fetchJson(configSource),
-			this.fetchJson(commonSource),
 			this.fetchJson(itemsSource),
 			this.fetchJson(equipmentsSource),
 			this.fetchJson(studentsSource),
@@ -51,7 +49,6 @@ export class PreloadService {
 		]);
 
 		this.dataService.setConfig(config);
-		this.dataService.setCommon(common);
 		this.dataService.setItems(items);
 		this.dataService.setEquipments(equipments);
 		this.dataService.setStudents(students);
