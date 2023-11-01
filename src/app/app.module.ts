@@ -19,6 +19,7 @@ import { ExportModule } from './pages/export/export.module';
 import { IconSelectorModule } from './pages/icon-selector/icon-selector.module';
 import { SelectorModule } from './pages/selector/selector.module';
 import { SettingModule } from './pages/setting/setting.module';
+import { SquadTextModule } from './pages/squad-text/squad-text.module';
 import { PreloadService } from './services/preload.service';
 import { APP_BASE_HREF } from '@angular/common';
 import { CampaignDialogModule } from './pages/campaign-dialog/campaign-dialog.module';
@@ -37,6 +38,7 @@ import { CampaignDialogModule } from './pages/campaign-dialog/campaign-dialog.mo
 		IconSelectorModule,
 		SettingModule,
 		CampaignDialogModule,
+		SquadTextModule,
 
 		MatButtonModule,
 		MatDialogModule,

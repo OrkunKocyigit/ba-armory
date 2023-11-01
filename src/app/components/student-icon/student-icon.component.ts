@@ -26,7 +26,7 @@ export class StudentIconComponent implements OnInit {
 	constructor(private readonly dataService: DataService) {}
 
 	ngOnInit(): void {
-		this.student = this.dataService.students.get(this.id) ?? null;
+		this.student = this.dataService.getStudent(this.id) ?? null;
 
 		if (this.student) {
 			// i18n
@@ -39,7 +39,7 @@ export class StudentIconComponent implements OnInit {
 	get adaptationIcon() {
 		if (this.terrain == null) return null;
 
-		const adaptation = this.student[`${this.terrain.toLowerCase() as Lowercase<Terrain>}BattleAdaptation`];
+		const adaptation = this.student.getBattleAdaptation(this.terrain);
 		return `${environment.CDN_BASE}/images/ui/Ingame_Emo_Adaptresult${this.dataService.adaptaionAmount[adaptation]}.png`;
 	}
 }

@@ -1,17 +1,37 @@
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 
 import { Injectable } from '@angular/core';
-import { Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
-import { ArmorType, BulletType, EquipmentCategory, ItemCategory, Reward, SkillType, StuffCategory, Terrain } from '../entities/enum';
+import { ALT_OFFSET, Deck, ELIGMA_ID, EQUIPMENT_OFFSET, FURNITURE_OFFSET } from '../entities/deck';
+import {
+	ArmorType,
+	BulletType,
+	EquipmentCategory,
+	ItemCategory,
+	Reward,
+	SkillType,
+	SquadType,
+	StuffCategory,
+	Terrain,
+} from '../entities/enum';
+import { Config } from '../entities/config';
 import { Equipment } from '../entities/equipment';
 import { I18N } from '../entities/i18n';
 import { EXTRA_ICONS, RAID_ICONS } from '../entities/icons';
 import { Localization } from '../entities/localization';
 import { Stage } from '../entities/stage';
 import { Student } from '../entities/student';
-import { ElephSortOption, ItemSortOption, LanguageOption, RegionOption, StudentSortOption, TerrainOption } from '../entities/types';
+import {
+	ArmorTypeOption,
+	BulletTypeOption,
+	ElephSortOption,
+	ItemSortOption,
+	LanguageOption,
+	RegionOption,
+	SquadTypeOption,
+	StudentSortOption,
+	TerrainOption,
+} from '../entities/types';
 import { RewardService } from './reward.service';
-import { Config } from '../entities/config';
 
 @Injectable({
 	providedIn: 'root',
@@ -66,6 +86,9 @@ export class DataService {
 	itemSortOptions: ItemSortOption[] = [];
 	elephSortOptions: ElephSortOption[] = [];
 
+	bulletTypeOptions: BulletTypeOption[];
+	armorTypeOptions: ArmorTypeOption[];
+	squadTypeOptions: SquadTypeOption[];
 	terrainOptions: TerrainOption[] = [];
 
 	link = '';
@@ -82,23 +105,20 @@ export class DataService {
 	}
 
 	setStudents(json: any[]) {
-		const region = this.region;
 		this.students = new Map(
 			plainToInstance(Student, json, {
 				excludeExtraneousValues: true,
 				exposeDefaultValues: true,
+			}).map((student) => {
+				student.skills = student.skills.filter(
+					(skill) =>
+						skill.skillType === SkillType.Ex ||
+						skill.skillType === SkillType.Normal ||
+						skill.skillType === SkillType.Passive ||
+						skill.skillType === SkillType.Sub
+				);
+				return [student.id, student];
 			})
-				.filter((student) => student.isReleased[region])
-				.map((student) => {
-					student.skills = student.skills.filter(
-						(skill) =>
-							skill.skillType === SkillType.Ex ||
-							skill.skillType === SkillType.Normal ||
-							skill.skillType === SkillType.Passive ||
-							skill.skillType === SkillType.Sub
-					);
-					return [student.id, student];
-				})
 		);
 	}
 
@@ -208,6 +228,10 @@ export class DataService {
 
 	setLocalization(json: any) {
 		this.localization = json;
+
+		this.regionOptions.forEach((regionOption) => {
+			regionOption.label = this.localization.ServerName[regionOption.id];
+		});
 	}
 
 	setI18N(json: any) {
@@ -358,6 +382,21 @@ export class DataService {
 			},
 		];
 
+		this.bulletTypeOptions = [BulletType.Explosion, BulletType.Pierce, BulletType.Mystic, BulletType.Sonic].map((bullet) => ({
+			id: bullet,
+			label: this.localization.BulletType[bullet],
+		}));
+
+		this.armorTypeOptions = [ArmorType.LightArmor, ArmorType.HeavyArmor, ArmorType.Unarmed, ArmorType.ElasticArmor].map((armor) => ({
+			id: armor,
+			label: this.localization.ArmorType[armor],
+		}));
+
+		this.squadTypeOptions = [SquadType.Main, SquadType.Support].map((squad) => ({
+			id: squad,
+			label: this.localization.SquadType[squad],
+		}));
+
 		this.terrainOptions = [Terrain.Street, Terrain.Outdoor, Terrain.Indoor].map((terrain) => ({
 			id: terrain,
 			label: this.localization.AdaptationType[terrain],
@@ -372,9 +411,8 @@ export class DataService {
 		this.deck.hydrate(this, rewardService);
 	}
 
-	getEquipmentTier(equipmentCategory: EquipmentCategory, tier: number) {
-		const categoryMap = this.equipmentsByCategory.get(equipmentCategory);
-		return categoryMap?.get(tier) ?? 0;
+	getStudent(id: number) {
+		return this.students.get(id % ALT_OFFSET);
 	}
 
 	getStuff(id: number) {

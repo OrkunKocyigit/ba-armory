@@ -1,17 +1,87 @@
 <h2 mat-dialog-title>{{ title }}</h2>
-<div class="options display-block">
-	<!-- TODO: i18n -->
-	<mat-checkbox
-		class="selector_action-show_duplicated_students"
-		[(ngModel)]="dataService.deck.options.showDuplicatedStudents"
-		color="accent"
-	>
-		{{ dataService.i18n.selector_show_duplicated_students }}
-	</mat-checkbox>
-	<mat-form-field>
-		<mat-label>{{ studentName }}</mat-label>
-		<input matInput type="text" [ngModel]="filterText" (ngModelChange)="handleUpdateFilterText($event)" (focus)="handleFilterInputClicked($event)"/>
-	</mat-form-field>
+<div class="options">
+	<div class="options-spacer display-block">
+		<mat-form-field>
+			<mat-label>{{ studentName }}</mat-label>
+			<input matInput type="text" [ngModel]="filterText" (ngModelChange)="handleUpdateFilterText($event)"
+										(focus)="handleFilterInputClicked($event)" />
+		</mat-form-field>
+	</div>
+	<div class="display-block">
+		<!-- TODO: i18n -->
+		<mat-checkbox class="selector_action-is_assist_students" [(ngModel)]="dataService.deck.options.isAssistStudents" color="accent">
+			<!-- TODO: i18n -->
+			{{ dataService.i18n.selector_is_assist_students }}
+		</mat-checkbox>
+
+		<mat-checkbox
+			class="selector_action-show_duplicated_students"
+			[(ngModel)]="dataService.deck.options.showDuplicatedStudents"
+			color="accent"
+		>
+			<!-- TODO: i18n -->
+			{{ dataService.i18n.selector_show_duplicated_students }}
+		</mat-checkbox>
+
+		<mat-checkbox class="selector_action-show_future_students" [(ngModel)]="dataService.deck.options.showFutureStudents" color="accent">
+			<!-- TODO: i18n -->
+			{{ dataService.i18n.selector_show_future_students }}
+		</mat-checkbox>
+	</div>
+</div>
+<div class="options">
+	<div class="selector_action-filter selector_action-filter_bullet_type">
+		<button
+			*ngFor="let option of dataService.bulletTypeOptions"
+			mat-stroked-button
+			[color]="option.id"
+			[title]="option.label"
+			[attr.active]="selectedBulletTypeOptions.has(option.id) || undefined"
+			(click)="handleClickFilterBulletTypeOption(option.id)"
+		>
+			{{ option.label }}
+		</button>
+	</div>
+
+	<div class="selector_action-filter selector_action-filter_armor_type">
+		<button
+			*ngFor="let option of dataService.armorTypeOptions"
+			mat-stroked-button
+			[color]="option.id"
+			[title]="option.label"
+			[attr.active]="selectedArmorTypeOptions.has(option.id) || undefined"
+			(click)="handleClickFilterArmorTypeOption(option.id)"
+		>
+			{{ option.label }}
+		</button>
+	</div>
+
+	<div class="selector_action-filter selector_action-filter_squad_type">
+		<button
+			*ngFor="let option of dataService.squadTypeOptions"
+			mat-stroked-button
+			[color]="option.id"
+			[title]="option.label"
+			[attr.active]="selectedSquadTypeOptions.has(option.id) || undefined"
+			(click)="handleClickFilterSquadTypeOption(option.id)"
+		>
+			{{ option.label }}
+		</button>
+	</div>
+
+	<div class="selector_action-filter selector_action-filter_adaptation_type">
+		<button
+			*ngFor="let option of dataService.terrainOptions"
+			mat-stroked-button
+			color="success"
+			[title]="option.label"
+			[attr.active]="selectedTerrainOptions.has(option.id) || undefined"
+			(click)="handleClickFilterTerrainOption(option.id)"
+		>
+			<mat-icon [svgIcon]="'terrain_' + option.id"></mat-icon>
+			{{ option.label }}
+		</button>
+	</div>
 </div>
 <mat-divider></mat-divider>
 <div class="students" mat-dialog-content>
@@ -22,3 +92,4 @@
 		(click)="handleClickStudent(id)"
 	></ba-student-icon>
 </div>
+

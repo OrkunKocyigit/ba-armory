@@ -15,6 +15,12 @@
 		}
 	}
 
+	&.is_alt {
+		.mat-card-header {
+			background-color: #f5efd6;
+		}
+	}
+
 	&:not(.is_target) {
 		::ng-deep .is_target-show {
 			display: none;
@@ -127,6 +133,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="2"] {
 			::ng-deep {
 				.br-unit:nth-child(n + 3) {
@@ -136,6 +143,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="3"] {
 			::ng-deep {
 				.br-unit:nth-child(n + 4) {
@@ -145,6 +153,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="4"] {
 			::ng-deep {
 				.br-unit:nth-child(n + 5) {
@@ -164,6 +173,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="4"] {
 			::ng-deep {
 				.br-unit:nth-child(-n + 4) {
@@ -173,6 +183,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="3"] {
 			::ng-deep {
 				.br-unit:nth-child(-n + 3) {
@@ -182,6 +193,7 @@ bar-rating {
 				}
 			}
 		}
+
 		&[value="2"] {
 			::ng-deep {
 				.br-unit:nth-child(-n + 2) {
@@ -203,11 +215,13 @@ bar-rating {
 		content: "Lv.";
 		display: block;
 	}
+
 	button {
 		font-size: 18px !important;
 		padding: 0 4px !important;
 		min-width: unset !important;
 	}
+
 	input {
 		width: 2em;
 		padding-top: 2px;
@@ -237,6 +251,12 @@ ba-skill-card[skill_type="gearnormal"] {
 
 	.mat-button {
 		margin: 0;
+		flex-shrink: 0;
+		min-width: unset;
+	}
+
+	.action-assist {
+		pointer-events: none;
 	}
 
 	> * {

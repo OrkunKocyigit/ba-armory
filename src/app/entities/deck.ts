@@ -1,9 +1,9 @@
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
-import { ChangeDispatcher, dispatchChange, Dispatcher } from 'prop-change-decorators';
+import { Change, ChangeDispatcher, dispatchChange, dispatchChanges, Dispatcher } from 'prop-change-decorators';
 
 import { DeckOptions } from './deck-options';
 import { DeckSquad } from './deck-squad';
-import { DeckStocks, transformStocks, wrapStocks } from './deck-stocks';
+import { DeckStocks, DeckStocksChange, transformStocks, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
 
 import type { DataService } from '../services/data.service';
@@ -18,6 +18,8 @@ export const FURNITURE_OFFSET = 1000000;
 export const GOLD_ID = 1;
 export const ACTION_POINT_ID = 5;
 export const ELIGMA_ID = 23;
+
+export const ALT_OFFSET = 1000000;
 
 @Exclude()
 export class Deck {
@@ -84,6 +86,9 @@ export class Deck {
 		if (this.stocks == null) {
 			this.stocks = wrapStocks({});
 		}
+		this.stocks[DeckStocksChange]().subscribe(([itemId, oldValue]) => {
+			dispatchChanges(this as Deck, { stocks: { [itemId]: new Change(oldValue, this.stocks[itemId]) } });
+		});
 
 		if (this.students == null) {
 			this.students = new Map();

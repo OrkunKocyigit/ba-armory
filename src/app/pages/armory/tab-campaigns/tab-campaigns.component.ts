@@ -15,6 +15,7 @@ import { CampaignDialogComponent } from '../../campaign-dialog/campaign-dialog.c
 export class TabCampaignsComponent implements OnInit, OnDestroy {
 	private changeSubscription: Subscription;
 	private requiredUpdatedSubscription: Subscription;
+	private stagesUpdatedSubscription: Subscription;
 
 	constructor(
 		public readonly dataService: DataService,
@@ -33,15 +34,21 @@ export class TabCampaignsComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.requiredUpdatedSubscription?.unsubscribe();
+		this.stagesUpdatedSubscription?.unsubscribe();
 		this.changeSubscription?.unsubscribe();
 	}
 
 	handleChangeSquad() {
 		this.requiredUpdatedSubscription?.unsubscribe();
+		this.stagesUpdatedSubscription?.unsubscribe();
 		this.requiredUpdatedSubscription = this.dataService.deck.selectedSquad.requiredUpdated$.subscribe(() => {
 			this.changeDetectorRef.markForCheck();
 		});
+		this.stagesUpdatedSubscription = this.dataService.deck.selectedSquad.stagesUpdated$.subscribe(() => {
+			this.changeDetectorRef.markForCheck();
+		});
 		this.changeDetectorRef.markForCheck();
+		this.dataService.deck.selectedSquad.stagesStaled$.next();
 	}
 
 	async showCampaignModal(id: number, amount: number) {

@@ -27,6 +27,8 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 	action_upgrade: string;
 	action_target: string;
 	action_update: string;
+	action_maximize: string;
+	action_assist: string;
 
 	name: string;
 	dbUrl: string;
@@ -40,6 +42,9 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 	position: string;
 	collectionTextureUrl: string;
 	schoolIconUrl: string;
+
+	@HostBinding('class.is_alt')
+	isAlt = false;
 
 	@HostBinding('class.is_target')
 	isTarget = false;
@@ -78,12 +83,14 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.model = this.dataService.deck.students.get(this.id);
-		const student = this.dataService.students.get(this.id);
+		const student = this.dataService.getStudent(this.id);
 
 		this.action_remove = this.dataService.i18n.student_action_remove;
 		this.action_upgrade = this.dataService.i18n.student_action_upgrade;
 		this.action_target = this.dataService.i18n.student_action_target;
 		this.action_update = this.dataService.i18n.student_action_update;
+		this.action_maximize = this.dataService.i18n.student_action_maximize;
+		this.action_assist = this.dataService.i18n.student_action_assist;
 
 		this.name = student.name;
 		this.dbUrl = `${environment.SCHALEDB_BASE}/?chara=${encodeURIComponent(student.pathName)}`;
@@ -100,6 +107,8 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 		this.squadTypeText = this.dataService.localization.SquadType[this.squadType];
 		this.collectionTextureUrl = student.collectionTextureUrl;
 		this.schoolIconUrl = student.schoolIconUrl;
+
+		this.isAlt = this.model.isAlt();
 		this.isTarget = this.model.isTarget;
 
 		this.updateIsUpgraded();
@@ -138,6 +147,20 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 	handleClickUpgrade() {
 		for (const equipment of this.model.equipments) {
 			equipment.tierTarget = equipment.tierMax;
+		}
+	}
+
+	handleClickMaximize() {
+		this.model.level = this.model.levelMax;
+		this.model.star = this.model.starMax;
+		this.model.weapon = this.model.weaponMax;
+		this.model.gear = this.model.gearMax;
+
+		for (const skill of this.model.skills) {
+			skill.level = skill.levelMax;
+		}
+		for (const equipment of this.model.equipments) {
+			equipment.tier = equipment.tierMax;
 		}
 	}
 

@@ -25,10 +25,15 @@
 	"student_action_upgrade": "Latest",
 	"student_action_target": "Target",
 	"student_action_update": "Upgrade",
+	"student_action_maximize": "Maximize",
+	"student_action_assist": "Assist",
 	"selector_show_duplicated_students": "Allow Duplicates",
+	"selector_show_future_students": "Allow Future",
+	"selector_is_assist_students": "As Assist",
 	"squad_name": "Squad",
 	"squad_action_remove": "Remove Squad",
 	"squad_action_pin": "Pin Squad",
+	"squad_action_text": "Text",
 	"item_show_surplus_items": "Show Surplus",
 	"item_show_required_items": "Show Required",
 	"item_show_elephs": "Show Eleph",
@@ -45,5 +50,7 @@
 	"eleph_sort_total": "Total Cost",
 	"eleph_sort_deficit": "Deficit",
 	"eleph_sort_required": "Required",
-	"eleph_sort_stock": "Stock"
+	"eleph_sort_stock": "Stock",
+	"arena_current_rank": "Your Current Ranking",
+	"arena_next_rank": "Highest Opponent Rankings"
 }

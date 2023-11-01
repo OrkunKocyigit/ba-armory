@@ -1,6 +1,6 @@
 {
 	"name": "ba-armory",
-	"version": "1.3.11",
+	"version": "1.3.12",
 	"type": "module",
 	"scripts": {
 		"format": "prettier --write ./src",
@@ -42,6 +42,7 @@
 		"prop-change-decorators": "^1.0.1",
 		"rxjs": "~7.5.0",
 		"sortablejs": "^1.15.0",
+		"string-width": "^6.1.0",
 		"tslib": "^2.3.0",
 		"zone.js": "~0.11.4"
 	},

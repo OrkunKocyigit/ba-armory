@@ -2,11 +2,11 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { Change, ChangeDispatcher, dispatchChanges, Dispatcher } from 'prop-change-decorators';
 import { debounceTime, filter, Subject, Subscription } from 'rxjs';
 
-import { ACTION_POINT_ID } from './deck';
+import { ACTION_POINT_ID, ALT_OFFSET } from './deck';
 import { DeckStocks, DeckStocksClear, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
 import { CampaignDifficulty, StuffCategory, Terrain } from './enum';
-import { ElephSortOption, ItemSortOption, SortOption, StudentSortOption } from './types';
+import { ElephSortOption, ItemSortOption, SortOption, StudentSortOption, Tab } from './types';
 
 import type { DataService } from '../services/data.service';
 import { RewardService } from '../services/reward.service';
@@ -31,6 +31,12 @@ export class DeckSquad {
 	@Expose({ name: 'pinned' })
 	pinned: boolean = false;
 
+	@Expose({ name: 'bounded' })
+	bounded: boolean = false;
+
+	@Expose({ name: 'tab' })
+	tab: Tab = Tab.items;
+
 	readonly required: DeckStocks = wrapStocks({});
 
 	readonly stages: {
@@ -42,6 +48,8 @@ export class DeckSquad {
 	readonly change$: ChangeDispatcher<DeckSquad>;
 	readonly requiredStaled$ = new Subject<void>();
 	readonly requiredUpdated$ = new Subject<void>();
+	readonly stagesStaled$ = new Subject<void>();
+	readonly stagesUpdated$ = new Subject<void>();
 
 	autoIcon: string = '';
 
@@ -61,7 +69,11 @@ export class DeckSquad {
 			this.pinned = false;
 		}
 
-		this.students = (this.students ?? []).filter((studentId) => dataService.students.has(studentId));
+		if (this.tab == null) {
+			this.tab = 0;
+		}
+
+		this.students = (this.students ?? []).filter((studentId) => dataService.deck.students.has(studentId));
 
 		if (this.icon == null || this.icon === '') {
 			this.icon = '';
@@ -87,14 +99,19 @@ export class DeckSquad {
 			if (Array.isArray(changes.students)) {
 				for (const studentChange of changes.students) {
 					if (studentChange.previousValue) {
-						unsubscribeDeckStudent(dataService.deck.students.get(studentChange.previousValue));
-						this.requiredStaled$.next();
+						const deckStudent = dataService.deck.students.get(studentChange.previousValue);
+						if (!deckStudent.isAlt()) {
+							unsubscribeDeckStudent(deckStudent);
+							this.requiredStaled$.next();
+						}
 					}
 
 					if (studentChange.currentValue) {
 						const deckStudent = dataService.deck.students.get(studentChange.currentValue);
-						subscribeDeckStudent(deckStudent);
-						this.requiredStaled$.next();
+						if (!deckStudent.isAlt()) {
+							subscribeDeckStudent(deckStudent);
+							this.requiredStaled$.next();
+						}
 					}
 				}
 				this.updateAutoIcon(dataService);
@@ -107,6 +124,12 @@ export class DeckSquad {
 			}
 		});
 
+		dataService.deck.change$.subscribe((changes) => {
+			if (changes.stocks) {
+				this.stagesStaled$.next();
+			}
+		});
+
 		this.requiredStaled$
 			.pipe(
 				filter(() => dataService.deck.selectedSquadId === this.id),
@@ -116,9 +139,20 @@ export class DeckSquad {
 				this.updateRequiredItems(dataService, rewardService);
 			});
 
+		this.stagesStaled$
+			.pipe(
+				filter(() => dataService.deck.selectedSquadId === this.id && dataService.deck.selectedSquad.tab === Tab.campaigns),
+				debounceTime(200)
+			)
+			.subscribe(() => {
+				this.updateStages(dataService, rewardService);
+			});
+
 		for (const studentId of this.students) {
 			const deckStudent = dataService.deck.students.get(studentId);
-			subscribeDeckStudent(deckStudent);
+			if (!deckStudent.isAlt()) {
+				subscribeDeckStudent(deckStudent);
+			}
 		}
 	}
 
@@ -127,9 +161,18 @@ export class DeckSquad {
 	}
 
 	addStudent(this: DeckSquad, dataService: DataService, studentId: number) {
-		if (!dataService.deck.options.showDuplicatedStudents && this.hasStudent(studentId)) return true;
+		if (studentId > ALT_OFFSET) {
+			if (!dataService.deck.students.has(studentId)) {
+				const student = dataService.getStudent(studentId);
+				if (student == null) return false;
 
-		if (!dataService.students.has(studentId)) return false;
+				const deckStudent = DeckStudent.fromStudent(dataService, student);
+				(deckStudent as any).id = studentId;
+				dataService.deck.students.set(studentId, deckStudent);
+			}
+		} else {
+			if (!dataService.students.has(studentId)) return false;
+		}
 
 		this.students.push(studentId);
 		dispatchChanges(this, { students: [new Change(undefined, studentId)] });
@@ -156,6 +199,8 @@ export class DeckSquad {
 
 			const deckStudent = dataService.deck.students.get(studentId);
 
+			if (deckStudent.isAlt()) continue;
+
 			for (const [id, amount] of deckStudent.requiredItems) {
 				this.required[id] += amount;
 			}
@@ -163,8 +208,8 @@ export class DeckSquad {
 			counted.add(studentId);
 		}
 
-		this.updateStages(dataService, rewardService);
 		this.requiredUpdated$.next();
+		this.updateStages(dataService, rewardService);
 	}
 
 	updateStages(dataService: DataService, rewardService: RewardService) {
@@ -219,11 +264,13 @@ export class DeckSquad {
 			});
 
 		this.stages.splice(0, this.stages.length, ...candidates);
+
+		this.stagesUpdated$.next();
 	}
 
 	updateAutoIcon(dataService: DataService) {
 		if (this.students.length > 0) {
-			this.autoIcon = dataService.students.get(this.students[0]).collectionTextureUrl;
+			this.autoIcon = dataService.getStudent(this.students[0]).collectionTextureUrl;
 		} else {
 			this.autoIcon = './assets/icons/icon-32x32.png';
 		}

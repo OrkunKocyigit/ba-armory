@@ -1,9 +1,11 @@
+import { ArmorType, BulletType } from './enum';
+
 export interface Config {
 	links: Link[];
 	build: number;
 	Regions: Region[];
 	Changelog: Changelog[];
-	TypeEffectiveness: TypeEffectiveness;
+	TypeEffectiveness: BulletTypeEffectivenessMap;
 	GachaGroups: GachaGroup[];
 }
 
@@ -58,22 +60,9 @@ export interface CurrentRAID {
 	end: number;
 }
 
-export interface TypeEffectiveness {
-	Normal: WeaponType;
-	Explosion: WeaponType;
-	Pierce: WeaponType;
-	Mystic: WeaponType;
-	Sonic: WeaponType;
-}
+export type BulletTypeEffectivenessMap = Record<BulletType, BulletTypeEffectiveness>;
 
-export interface WeaponType {
-	LightArmor: number;
-	HeavyArmor: number;
-	Unarmed: number;
-	Structure: number;
-	ElasticArmor: number;
-	Normal: number;
-}
+export type BulletTypeEffectiveness = Record<ArmorType, number>;
 
 export interface Link {
 	section: string;

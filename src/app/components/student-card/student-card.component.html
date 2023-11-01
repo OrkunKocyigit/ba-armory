@@ -1,9 +1,9 @@
 <mat-card class="mat-elevation-z3">
 	<mat-card-header>
 		<img mat-card-avatar loading="lazy" [src]="collectionTextureUrl" [alt]="name" />
-		<mat-card-title
-			><a [href]="dbUrl" target="_blank" rel="noopener noreferrer" tabindex="-1">{{ name }}</a></mat-card-title
-		>
+		<mat-card-title>
+			<a [href]="dbUrl" target="_blank" rel="noopener noreferrer" tabindex="-1">{{ name }}</a>
+		</mat-card-title>
 		<mat-card-subtitle class="tags">
 			<button mat-flat-button tabindex="-1" size="small" [color]="bulletType" [title]="bulletTypeText">
 				<mat-icon svgIcon="bullet_type"></mat-icon>
@@ -97,7 +97,7 @@
 			<ba-gear-card [id]="id" [isTarget]="isTarget"></ba-gear-card>
 		</div>
 	</mat-card-content>
-	<mat-card-actions>
+	<mat-card-actions *ngIf="!isAlt; else altActions">
 			<!-- TODO: i18n -->
 		<button class="action-remove" mat-button color="warn" tabindex="-1" size="small" (click)="handleClickDelete()">
 			<mat-icon>block</mat-icon> {{ action_remove }}
@@ -128,5 +128,26 @@
 			<mat-icon>merge_type</mat-icon> {{ action_update }}
 		</button>
 	</mat-card-actions>
+	<ng-template #altActions>
+		<mat-card-actions>
+			<button class="action-remove" mat-button color="warn" tabindex="-1" size="small" (click)="handleClickDelete()">
+				<mat-icon>block</mat-icon> {{ action_remove }}
+			</button>
+			<button
+				class="action-upgrade"
+				mat-button
+				color="basic"
+				tabindex="-1"
+				size="small"
+				[disabled]="isUpgraded"
+				(click)="handleClickMaximize()"
+			>
+				<mat-icon>upgrade</mat-icon> {{ action_maximize }}
+			</button>
+			<button class="action-assist" mat-button color="accent" tabindex="-1" size="small">
+				<mat-icon>assistant</mat-icon> {{ action_assist }}
+			</button>
+		</mat-card-actions>
+	</ng-template>
 	<mat-card-footer></mat-card-footer>
 </mat-card>

@@ -25,10 +25,15 @@ export interface I18N {
 	student_action_upgrade: string;
 	student_action_target: string;
 	student_action_update: string;
+	student_action_maximize: string;
+	student_action_assist: string;
 	selector_show_duplicated_students: string;
+	selector_show_future_students: string;
+	selector_is_assist_students: string;
 	squad_name: string;
 	squad_action_remove: string;
 	squad_action_pin: string;
+	squad_action_text: string;
 	item_show_surplus_items: string;
 	item_show_required_items: string;
 	item_show_elephs: string;
@@ -46,4 +51,6 @@ export interface I18N {
 	eleph_sort_deficit: string;
 	eleph_sort_required: string;
 	eleph_sort_stock: string;
+	arena_current_rank: string;
+	arena_next_rank: string;
 }

@@ -12,6 +12,7 @@ import {
 	SquadType,
 	StatLevelUpType,
 	TacticRole,
+	Terrain,
 	WeaponType,
 } from './enum';
 import { Skill } from './skill';
@@ -218,14 +219,13 @@ export class Student {
 	@Type(() => Array)
 	skillMaterialAmount: Array<number[]>;
 
+	getBattleAdaptation(terrain: Terrain) {
+		return this[`${terrain.toLowerCase() as Lowercase<Terrain>}BattleAdaptation`];
+	}
+
 	get collectionTextureUrl() {
 		return `${environment.CDN_BASE}/images/student/collection/${this.id}.webp`;
 	}
-
-	get collectionBGUrl() {
-		return `${environment.CDN_BASE}/images/background/${this.collectionBG}.jpg`;
-	}
-
 	get schoolIconUrl() {
 		return `${environment.CDN_BASE}/images/schoolicon/School_Icon_${this.school.toUpperCase()}_W.png`;
 	}
