@@ -3,7 +3,19 @@ import { environment } from '../../environments/environment';
 export const RAID_ICONS: string[] = [];
 export const EXTRA_ICONS: string[] = [];
 
-const raids = ['Binah', 'Chesed', 'Shirokuro', 'Hieronymus', 'KaitenFxMk0', 'Perorozilla', 'HOD', 'Goz'];
+const raids = [
+	'Binah',
+	'Chesed',
+	'Shirokuro',
+	'Hieronymus',
+	'KaitenFxMk0',
+	'Perorozilla',
+	'HOD',
+	'Goz',
+	'EN0005',
+	'RaidHoverCraft',
+	'EN0006',
+];
 for (const raid of raids) {
 	RAID_ICONS.push(`${environment.CDN_BASE}/images/raid/icon/Icon_${raid}.png`);
 	RAID_ICONS.push(`${environment.CDN_BASE}/images/raid/icon/Icon_${raid}_Insane.png`);
