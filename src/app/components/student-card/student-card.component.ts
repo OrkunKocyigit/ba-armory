@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
@@ -20,6 +21,9 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 
 	@Input()
 	terrain?: Terrain;
+
+	@HostBinding('class')
+	readonly className = 'block';
 
 	model: DeckStudent;
 
@@ -123,13 +127,13 @@ export class StudentCardComponent implements OnInit, OnDestroy {
 		});
 
 		this.changeSubscription = this.model.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('equipments')) {
+			if (hasKeys(changes, 'equipments')) {
 				this.updateIsUpgraded();
 			}
 			if (changes.gear !== undefined) {
 				this.updateIsUpdatable();
 			}
-			if (changes.hasOwnProperty('isTarget')) {
+			if (hasKeys(changes, 'isTarget')) {
 				this.isTarget = changes.isTarget.currentValue;
 			}
 			this.changeDetectorRef.markForCheck();

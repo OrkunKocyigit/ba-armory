@@ -1,9 +1,11 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostBinding,
 	HostListener,
 	Input,
 	OnChanges,
@@ -19,8 +21,7 @@ import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'ba-equipment-card',
 	templateUrl: './equipment-card.component.html',
-	styleUrls: ['./equipment-card.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class EquipmentCardComponent implements OnInit, OnChanges, OnDestroy {
 	@Input()
@@ -31,11 +32,16 @@ export class EquipmentCardComponent implements OnInit, OnChanges, OnDestroy {
 
 	id: number;
 
+	@HostBinding('class')
+	readonly className = 'contents';
+
+	@HostBinding('attr.title')
 	name: string;
 	iconUrl: string;
 	category: EquipmentCategory;
 	equipmentMap: Map<number, number>;
 
+	@HostBinding('attr.tier')
 	get tier() {
 		return this.isTarget ? this.model.tierTarget : this.model.tier;
 	}
@@ -60,7 +66,7 @@ export class EquipmentCardComponent implements OnInit, OnChanges, OnDestroy {
 		this.handleTierChange();
 
 		this.changeSubscription = this.model.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty(this.isTarget ? 'tierTarget' : 'tier')) {
+			if (hasKeys(changes, this.isTarget ? 'tierTarget' : 'tier')) {
 				this.handleTierChange();
 			}
 			this.changeDetectorRef.markForCheck();
@@ -68,7 +74,7 @@ export class EquipmentCardComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes.hasOwnProperty('isTarget') && !changes['isTarget'].firstChange) {
+		if (hasKeys(changes, 'isTarget') && !changes['isTarget'].firstChange) {
 			this.handleTierChange();
 		}
 	}

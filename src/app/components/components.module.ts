@@ -4,11 +4,11 @@ import { NgxHoverInputModule } from 'ngx-hover-input';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { ElephCardComponent } from './eleph-card/eleph-card.component';
@@ -37,7 +37,7 @@ import { StudentIconComponent } from './student-icon/student-icon.component';
 		FormsModule,
 		BarRatingModule,
 		MatMenuModule,
-		MatCardModule,
+		MatTooltipModule,
 		MatIconModule,
 		MatButtonModule,
 		MatRippleModule,

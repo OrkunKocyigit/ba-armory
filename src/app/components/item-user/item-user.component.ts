@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { DataService } from '../../services/data.service';
@@ -6,14 +6,16 @@ import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'ba-item-user',
 	templateUrl: './item-user.component.html',
-	styleUrls: ['./item-user.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ItemUserComponent implements OnInit {
 	@Input()
 	id: number;
 
-	users: [id: number, amount: number][] = [];
+	@HostBinding('class')
+	readonly className = 'contents';
+
+	users: { id: number; amount: number }[] = [];
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) data: { id: number },
@@ -36,7 +38,7 @@ export class ItemUserComponent implements OnInit {
 			const amount = this.dataService.deck.students.get(studentId)?.requiredItems?.get(item.id) ?? 0;
 
 			if (amount > 0) {
-				this.users.push([studentId, amount]);
+				this.users.push({ id: studentId, amount });
 			}
 
 			counted.add(studentId);

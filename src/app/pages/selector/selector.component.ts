@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
@@ -7,10 +8,9 @@ import { ALT_OFFSET } from '../../entities/deck';
 import { ArmorType, BulletType, SquadType, Terrain } from '../../entities/enum';
 
 @Component({
-	selector: "ba-selector",
-	templateUrl: "./selector.component.html",
-	styleUrls: ["./selector.component.less"],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'ba-selector',
+	templateUrl: './selector.component.html',
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SelectorComponent implements OnInit, OnDestroy {
 	title = '';
@@ -38,7 +38,7 @@ export class SelectorComponent implements OnInit, OnDestroy {
 		this.selectedTerrainOptions = new Set<Terrain>(this.dataService.deck.options.filterTerrain);
 
 		this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty("selectedSquadId")) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

@@ -1,6 +1,7 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { ELIGMA_ID } from '../../entities/deck';
@@ -10,11 +11,13 @@ import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'ba-eleph-card',
 	templateUrl: './eleph-card.component.html',
-	styleUrls: ['./eleph-card.component.less'],
 })
 export class ElephCardComponent implements OnInit, OnDestroy {
 	@Input()
 	id: number;
+
+	@HostBinding('class')
+	readonly className = 'contents';
 
 	model: DeckStudent;
 
@@ -36,7 +39,7 @@ export class ElephCardComponent implements OnInit, OnDestroy {
 		this.dbUrl = `${environment.SCHALEDB_BASE}/?item=${encodeURIComponent(this.id)}`;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

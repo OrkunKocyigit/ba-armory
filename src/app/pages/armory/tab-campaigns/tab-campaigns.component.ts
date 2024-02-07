@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
@@ -9,8 +10,7 @@ import { CampaignDialogComponent } from '../../campaign-dialog/campaign-dialog.c
 @Component({
 	selector: 'ba-tab-campaigns',
 	templateUrl: './tab-campaigns.component.html',
-	styleUrls: ['./tab-campaigns.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class TabCampaignsComponent implements OnInit, OnDestroy {
 	private changeSubscription: Subscription;
@@ -25,7 +25,7 @@ export class TabCampaignsComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

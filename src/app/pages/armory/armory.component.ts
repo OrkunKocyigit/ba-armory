@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { SortableOptions } from 'sortablejs';
 
@@ -17,11 +18,11 @@ import { SquadTextComponent } from '../squad-text/squad-text.component';
 	selector: 'ba-armory',
 	templateUrl: './armory.component.html',
 	styleUrls: ['./armory.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ArmoryComponent implements OnInit, OnDestroy {
 	readonly sortableOptions: SortableOptions = {
-		handle: '.mat-card-avatar',
+		handle: 'img.cursor-grab',
 		animation: 0,
 		swapThreshold: 1,
 	};
@@ -44,7 +45,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});
@@ -73,7 +74,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		const dialogRef = this.dialog.open(IconSelectorComponent, {
 			width: '100%',
 			height: 'auto',
-			maxHeight: 'calc(100% - var(--spacing-xx-large))',
+			maxHeight: 'calc(100vh - 2.25rem)',
 			autoFocus: false,
 			restoreFocus: false,
 		});
@@ -86,7 +87,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 		const dialogRef = this.dialog.open(SelectorComponent, {
 			width: '100%',
 			height: '100%',
-			maxHeight: 'calc(100% - var(--spacing-xx-large))',
+			maxHeight: 'calc(100vh - 2.25rem)',
 			autoFocus: false,
 			restoreFocus: false,
 		});
@@ -149,7 +150,7 @@ export class ArmoryComponent implements OnInit, OnDestroy {
 	async handleClickSquadText() {
 		const dialogRef = this.dialog.open(SquadTextComponent, {
 			height: 'auto',
-			maxHeight: 'calc(100% - var(--spacing-xx-large))',
+			maxHeight: 'calc(100vh - 2.25rem)',
 			autoFocus: false,
 			restoreFocus: false,
 		});

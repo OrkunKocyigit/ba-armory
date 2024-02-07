@@ -6,8 +6,7 @@ import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'ba-icon-selector',
 	templateUrl: './icon-selector.component.html',
-	styleUrls: ['./icon-selector.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class IconSelectorComponent {
 	constructor(public readonly dataService: DataService, public readonly dialogRef: MatDialogRef<IconSelectorComponent>) {}

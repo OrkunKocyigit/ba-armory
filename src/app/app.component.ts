@@ -1,21 +1,20 @@
-import { DOCUMENT } from "@angular/common";
-import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatIconRegistry } from "@angular/material/icon";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { DomSanitizer, Meta, Title } from "@angular/platform-browser";
+import { DOCUMENT } from '@angular/common';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 
-import { environment } from "../environments/environment";
-import { ExportComponent } from "./pages/export/export.component";
-import { SettingComponent } from "./pages/setting/setting.component";
-import { DataService } from "./services/data.service";
-import { PreloadService } from "./services/preload.service";
-import PACKAGE_JSON from "../../package.json";
+import { environment } from '../environments/environment';
+import { ExportComponent } from './pages/export/export.component';
+import { SettingComponent } from './pages/setting/setting.component';
+import { DataService } from './services/data.service';
+import { PreloadService } from './services/preload.service';
+import PACKAGE_JSON from '../../package.json';
 
 @Component({
 	selector: 'ba-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.less'],
 })
 export class AppComponent implements OnInit {
 	title = '';
@@ -30,6 +29,9 @@ export class AppComponent implements OnInit {
 	footer_3_start = '';
 	footer_3_end = '';
 	version: string;
+
+	@HostBinding('class')
+	readonly className = 'flex flex-col min-h-screen';
 
 	constructor(
 		@Inject(DOCUMENT) document: Document,

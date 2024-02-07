@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
@@ -6,13 +7,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../environments/environment';
 import { DataService } from '../../services/data.service';
 import { ItemUserComponent } from '../item-user/item-user.component';
-import { RewardService } from "../../services/reward.service";
+import { RewardService } from '../../services/reward.service';
 
 @Component({
 	selector: 'ba-item-icon',
 	templateUrl: './item-icon.component.html',
-	styleUrls: ['./item-icon.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ItemIconComponent implements OnInit, OnDestroy {
 	@Input()
@@ -20,6 +20,21 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 
 	@Input()
 	rate: number;
+
+	@Input()
+	hideShadow: boolean = false;
+
+	@Input()
+	hideName: boolean = false;
+
+	@HostBinding('class')
+	get className() {
+		return {
+			contents: true,
+			[this.deficit ? 'is-deficit' : 'is-surplus']: true,
+			'is-required': this.dataService.deck.selectedSquad.required[this.id] > 0,
+		};
+	}
 
 	@HostBinding('attr.category')
 	category: string;
@@ -31,14 +46,6 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 
 	get deficit() {
 		return this.dataService.deck.selectedSquad.required[this.id] > this.dataService.deck.stocks[this.id];
-	}
-
-	@HostBinding('class')
-	get classes() {
-		return {
-			[this.deficit ? 'is-deficit' : 'is-surplus']: true,
-			'is-required': this.dataService.deck.selectedSquad.required[this.id] > 0,
-		};
 	}
 
 	private changeSubscription: Subscription;
@@ -61,7 +68,7 @@ export class ItemIconComponent implements OnInit, OnDestroy {
 		this.iconUrl = item.iconUrl;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

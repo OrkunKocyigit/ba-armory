@@ -1,6 +1,17 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	HostBinding,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+} from '@angular/core';
 
 import { ACTION_POINT_ID } from '../../entities/deck';
 import { CampaignDifficulty, Reward } from '../../entities/enum';
@@ -10,8 +21,7 @@ import { RewardService } from '../../services/reward.service';
 @Component({
 	selector: 'ba-campaign-card',
 	templateUrl: './campaign-card.component.html',
-	styleUrls: ['./campaign-card.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class CampaignCardComponent implements OnInit, OnDestroy {
 	@Input()
@@ -25,6 +35,9 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 
 	@Output()
 	campaignModalSelected = new EventEmitter<number>();
+
+	@HostBinding('class')
+	readonly className = 'contents';
 
 	campaign_amount: string = '';
 	campaign_cost: string = '';
@@ -63,7 +76,7 @@ export class CampaignCardComponent implements OnInit, OnDestroy {
 		this.cost = campaign.entryCost.find(([itemId]) => itemId === ACTION_POINT_ID)?.[1] ?? 0;
 
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

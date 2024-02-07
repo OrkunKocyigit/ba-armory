@@ -3,12 +3,13 @@ import { SortablejsModule } from 'ngx-sortablejs-simple';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ComponentsModule } from '../../components/components.module';
 import { ArmoryComponent } from './armory.component';
@@ -27,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 		FormsModule,
 		SortablejsModule,
 
+		MatTooltipModule,
 		MatButtonModule,
 		MatCheckboxModule,
 		MatDividerModule,

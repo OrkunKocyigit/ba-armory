@@ -1,29 +1,32 @@
-<div class="options">
-	<!-- TODO: i18n -->
-	<mat-checkbox class="campaign_action-show_campaign_hard mat-flex-checkbox" [(ngModel)]="dataService.deck.options.showCampaignHard" color="accent">
-		{{ dataService.i18n.campaign_show_campaign_hard }}
-	</mat-checkbox>
-	<mat-checkbox *ngIf="dataService.deck.options.showCampaignHard" class="campaign_action-show_only_campaign_hard mat-flex-checkbox" [(ngModel)]="dataService.deck.options.showOnlyCampaignHard" color="accent">
-		{{ dataService.i18n.campaign_show_only_campaign_hard }}
-	</mat-checkbox>
-	<div class="options-spacer"></div>
-	<mat-form-field style="margin-bottom: -1.25em">
-		<mat-label>Normal Campaign Drop Rate</mat-label>
-		<mat-select [(ngModel)]="dataService.deck.options.normalCampaignDropRate">
-			<mat-option [value]="1">1x</mat-option>
-			<mat-option [value]="2">2x</mat-option>
-			<mat-option [value]="3">3x</mat-option>
-		</mat-select>
-	</mat-form-field>
-	<mat-form-field *ngIf="dataService.deck.options.showCampaignHard" style="margin-bottom: -1.25em">
-		<mat-label>Hard Campaign Drop Rate</mat-label>
-		<mat-select [(ngModel)]="dataService.deck.options.hardCampaignDropRate">
-			<mat-option [value]="1">1x</mat-option>
-			<mat-option [value]="2">2x</mat-option>
-			<mat-option [value]="3">3x</mat-option>
-		</mat-select>
-	</mat-form-field>
+<div class="actionbar">
+	<!-- i18n -->
+	<div class="actionbar-start">
+		<mat-checkbox class="campaign_action-show_campaign_hard" [(ngModel)]="dataService.deck.options.showCampaignHard" color="accent">
+			{{ dataService.i18n.campaign_show_campaign_hard }}
+		</mat-checkbox>
+		<mat-checkbox *ngIf="dataService.deck.options.showCampaignHard" class="campaign_action-show_only_campaign_hard mat-flex-checkbox" [(ngModel)]="dataService.deck.options.showOnlyCampaignHard" color="accent">
+			{{ dataService.i18n.campaign_show_only_campaign_hard }}
+		</mat-checkbox>
+	</div>
+	<div class="actionbar-end">
+		<mat-form-field>
+			<mat-label>Normal Campaign Drop Rate</mat-label>
+			<mat-select [(ngModel)]="dataService.deck.options.normalCampaignDropRate">
+				<mat-option [value]="1">1x</mat-option>
+				<mat-option [value]="2">2x</mat-option>
+				<mat-option [value]="3">3x</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field *ngIf="dataService.deck.options.showCampaignHard">
+			<mat-label>Hard Campaign Drop Rate</mat-label>
+			<mat-select [(ngModel)]="dataService.deck.options.hardCampaignDropRate">
+				<mat-option [value]="1">1x</mat-option>
+				<mat-option [value]="2">2x</mat-option>
+				<mat-option [value]="3">3x</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
 </div>
-<div class="list">
+<div class="flex flex-col items-stretch gap-3 p-2">
 	<ba-campaign-card *ngFor="let stage of dataService.deck.selectedSquad.stages" [id]="stage.id" [amount]="stage.amount" [showModal]="true" (campaignModalSelected)="showCampaignModal(stage.id, stage.amount)"></ba-campaign-card>
 </div>

@@ -20,10 +20,14 @@
 		"strictNullChecks": false,
 		"moduleResolution": "node",
 		"importHelpers": true,
-		"target": "es2020",
+		"target": "ES2022",
 		"module": "es2020",
-		"lib": ["es2020", "dom"],
-		"resolveJsonModule": true,
+		"lib": [
+			"es2020",
+			"dom"
+		],
+		"useDefineForClassFields": false,
+		"resolveJsonModule": true
 	},
 	"angularCompilerOptions": {
 		"enableI18nLegacyMessageIdFormat": false,

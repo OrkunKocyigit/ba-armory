@@ -34,11 +34,12 @@ export class PreloadService {
 		const itemsSource = `${environment.CDN_BASE}/data/${language}/items.min.json`;
 		const equipmentsSource = `${environment.CDN_BASE}/data/${language}/equipment.min.json`;
 		const studentsSource = `${environment.CDN_BASE}/data/${language}/students.min.json`;
-		const stagesSource = `${environment.CDN_BASE}/data/stages.min.json`;
+		const stagesSource = `${environment.CDN_BASE}/data/${language}/stages.min.json`;
 		const localizationSource = `${environment.CDN_BASE}/data/${language}/localization.min.json`;
 		const i18nSource = `./assets/i18n/${language}.json`;
+		const groupsSource = `${environment.CDN_BASE}/data/groups.min.json`;
 
-		const [config, items, equipments, students, stages, localization, i18n] = await Promise.all([
+		const [config, items, equipments, students, stages, localization, i18n, groups] = await Promise.all([
 			this.fetchJson(configSource),
 			this.fetchJson(itemsSource),
 			this.fetchJson(equipmentsSource),
@@ -46,6 +47,7 @@ export class PreloadService {
 			this.fetchJson(stagesSource),
 			this.fetchJson(localizationSource),
 			this.fetchJson(i18nSource),
+			this.fetchJson(groupsSource),
 		]);
 
 		this.dataService.setConfig(config);
@@ -55,6 +57,7 @@ export class PreloadService {
 		this.dataService.setStage(stages);
 		this.dataService.setLocalization(localization);
 		this.dataService.setI18N(i18n);
+		this.dataService.setGroups(groups);
 
 		this.dataService.setOthers();
 

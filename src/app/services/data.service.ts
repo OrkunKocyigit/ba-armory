@@ -32,6 +32,7 @@ import {
 	TerrainOption,
 } from '../entities/types';
 import { RewardService } from './reward.service';
+import { Groups } from '../entities/groups';
 
 @Injectable({
 	providedIn: 'root',
@@ -54,6 +55,7 @@ export class DataService {
 	config: Config;
 	localization: Localization;
 	i18n: I18N;
+	groups: Groups;
 
 	icons: string[] = [];
 
@@ -206,18 +208,18 @@ export class DataService {
 		}
 
 		for (const campaign of this.stages.campaign) {
-			campaign.rewards.default = mergeSameIds(campaign.rewards.default);
-			campaign.rewards.firstClear = mergeSameIds(campaign.rewards.firstClear);
-			campaign.rewards.threeStar = mergeSameIds(campaign.rewards.threeStar);
-			if (campaign.rewardsGlobal) {
-				campaign.rewardsGlobal.default = mergeSameIds(campaign.rewardsGlobal.default);
-				campaign.rewardsGlobal.firstClear = mergeSameIds(campaign.rewardsGlobal.firstClear);
-				campaign.rewardsGlobal.threeStar = mergeSameIds(campaign.rewardsGlobal.threeStar);
+			campaign.rewards.jp.default = mergeSameIds(campaign.rewards.jp.default);
+			campaign.rewards.jp.firstClear = mergeSameIds(campaign.rewards.jp.firstClear);
+			campaign.rewards.jp.threeStar = mergeSameIds(campaign.rewards.jp.threeStar);
+			if (campaign.rewards.global) {
+				campaign.rewards.global.default = mergeSameIds(campaign.rewards.global.default);
+				campaign.rewards.global.firstClear = mergeSameIds(campaign.rewards.global.firstClear);
+				campaign.rewards.global.threeStar = mergeSameIds(campaign.rewards.global.threeStar);
 			}
-			if (campaign.RewardsCn) {
-				campaign.RewardsCn.default = mergeSameIds(campaign.RewardsCn.default);
-				campaign.RewardsCn.firstClear = mergeSameIds(campaign.RewardsCn.firstClear);
-				campaign.RewardsCn.threeStar = mergeSameIds(campaign.RewardsCn.threeStar);
+			if (campaign.rewards.cn) {
+				campaign.rewards.cn.default = mergeSameIds(campaign.rewards.cn.default);
+				campaign.rewards.cn.firstClear = mergeSameIds(campaign.rewards.cn.firstClear);
+				campaign.rewards.cn.threeStar = mergeSameIds(campaign.rewards.cn.threeStar);
 			}
 		}
 		this.stages.hydrate(this);
@@ -420,5 +422,9 @@ export class DataService {
 		} else {
 			return this.items.get(id);
 		}
+	}
+
+	setGroups(json: any) {
+		this.groups = json;
 	}
 }

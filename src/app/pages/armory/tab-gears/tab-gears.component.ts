@@ -1,3 +1,4 @@
+import { hasKeys } from 'prop-change-decorators';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
@@ -10,7 +11,7 @@ import { DataService } from '../../../services/data.service';
 	selector: 'ba-tab-gears',
 	templateUrl: './tab-gears.component.html',
 	styleUrls: ['./tab-gears.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class TabGearsComponent implements OnInit, OnDestroy {
 	ids: number[] = [];
@@ -25,7 +26,7 @@ export class TabGearsComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.changeSubscription = this.dataService.deck.change$.subscribe((changes) => {
-			if (changes.hasOwnProperty('selectedSquadId')) {
+			if (hasKeys(changes, 'selectedSquadId')) {
 				this.handleChangeSquad();
 			}
 		});

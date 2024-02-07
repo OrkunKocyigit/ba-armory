@@ -2,6 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { Change, ChangeDispatcher, dispatchChanges, Dispatcher } from 'prop-change-decorators';
 import { debounceTime, filter, Subject, Subscription } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import { ACTION_POINT_ID, ALT_OFFSET } from './deck';
 import { DeckStocks, DeckStocksClear, wrapStocks } from './deck-stocks';
 import { DeckStudent } from './deck-student';
@@ -77,6 +78,8 @@ export class DeckSquad {
 
 		if (this.icon == null || this.icon === '') {
 			this.icon = '';
+		} else {
+			this.icon = this.icon.replace(`${environment.CDN_BASE}/images/items/icon/`, `${environment.CDN_BASE}/images/item/icon/`);
 		}
 		this.updateAutoIcon(dataService);
 

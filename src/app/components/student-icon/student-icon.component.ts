@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnInit } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { Terrain } from '../../entities/enum';
@@ -8,8 +8,7 @@ import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'ba-student-icon',
 	templateUrl: './student-icon.component.html',
-	styleUrls: ['./student-icon.component.less'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class StudentIconComponent implements OnInit {
 	student: Student | null;
@@ -20,20 +19,13 @@ export class StudentIconComponent implements OnInit {
 	@Input()
 	terrain?: Terrain;
 
-	bulletType: string;
-	armorType: string;
+	@HostBinding('class')
+	readonly className = 'contents';
 
 	constructor(private readonly dataService: DataService) {}
 
 	ngOnInit(): void {
 		this.student = this.dataService.getStudent(this.id) ?? null;
-
-		if (this.student) {
-			// i18n
-			this.bulletType = this.dataService.localization.BulletType[this.student.bulletType];
-			// i18n
-			this.armorType = this.dataService.localization.ArmorType[this.student.armorType];
-		}
 	}
 
 	get adaptationIcon() {

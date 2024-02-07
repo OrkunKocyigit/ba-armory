@@ -6,17 +6,11 @@ export interface Config {
 	Regions: Region[];
 	Changelog: Changelog[];
 	TypeEffectiveness: BulletTypeEffectivenessMap;
-	GachaGroups: GachaGroup[];
 }
 
 export interface Changelog {
 	date: string;
 	contents: string[];
-}
-
-export interface GachaGroup {
-	Id: number;
-	ItemList: Array<number[]>;
 }
 
 export interface Region {
