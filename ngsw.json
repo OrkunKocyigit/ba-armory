@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1707301297652,
+  "timestamp": 1708890604519,
   "index": "/ba-armory/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/ba-armory/favicon.ico",
         "/ba-armory/index.html",
-        "/ba-armory/main.ccbbdb433bc8c791.js",
+        "/ba-armory/main.475757f80aa284ca.js",
         "/ba-armory/manifest.webmanifest",
         "/ba-armory/polyfills.221336e4c04c6858.js",
         "/ba-armory/runtime.845d4e9c25cc8fc8.js",
@@ -78,10 +78,10 @@
     }
   ],
   "hashTable": {
-    "/ba-armory/assets/i18n/cn.json": "61244efbd2ae36e18c1bff12e365a403616e3b85",
-    "/ba-armory/assets/i18n/en.json": "7a2f2acc2c0c64e14171e9ac00a641b21a68f8d4",
-    "/ba-armory/assets/i18n/jp.json": "fa8e1a9eaf8f000a98434b9d5940a7ee17cac520",
-    "/ba-armory/assets/i18n/tw.json": "734c02ec80475b6933ec7d242b4f670c9bad0681",
+    "/ba-armory/assets/i18n/cn.json": "287e7010b48ce16fcc604329dba14119a62a5da2",
+    "/ba-armory/assets/i18n/en.json": "1e8220fc2917f720c26b5e751904f6eccea47137",
+    "/ba-armory/assets/i18n/jp.json": "cbfda9f0f82908009f4209b6c814e03d4437c080",
+    "/ba-armory/assets/i18n/tw.json": "61d6bbf0043db1e67482cb9e5c4f9d9e9223fd2a",
     "/ba-armory/assets/icons/apple-touch-icon.png": "8b3f8b6aef67077045a33320adc3e673791cadc5",
     "/ba-armory/assets/icons/icon-128x128.png": "d5ec7d53548efa2156ac1fddf7eb6a7211ad881b",
     "/ba-armory/assets/icons/icon-144x144.png": "bbb2e301523b4010239b2e1020126b57b68d0032",
@@ -95,9 +95,9 @@
     "/ba-armory/assets/icons/icon-72x72.png": "80180bc90b52c58bae0f9f22c665e3c9c49a05c2",
     "/ba-armory/assets/icons/icon-96x96.png": "196fe49ddc2a5dad1c684c9e0a3b61712e50ecdf",
     "/ba-armory/favicon.ico": "d5ac49d2f861b2cb0f24954784ab423e7033bfb1",
-    "/ba-armory/index.html": "9211c0ef2197ef097fd40927be0fe3db3119533e",
-    "/ba-armory/main.ccbbdb433bc8c791.js": "4f445abc7266335617276210a69c390ef2ec21b9",
-    "/ba-armory/manifest.webmanifest": "70b1340dbcbff67c26aeeaf7494df1ad5b08c1bc",
+    "/ba-armory/index.html": "b074dfc9d3451e29678e22b51da0016e625f7def",
+    "/ba-armory/main.475757f80aa284ca.js": "375a820e10e94f286a1787f3a9e5b2e08271e797",
+    "/ba-armory/manifest.webmanifest": "2efa9cde15aab22c1b042df84636e5656b2711af",
     "/ba-armory/polyfills.221336e4c04c6858.js": "97a190a46ecc1747ad24513a082250ce2673d43f",
     "/ba-armory/runtime.845d4e9c25cc8fc8.js": "59096c477675073435ddf0c3d19a44d432cad502",
     "/ba-armory/styles.035177b13bcea58e.css": "28af8cf73ed3cb40101a47a6a0c7760f92531b20"
